@@ -1,5 +1,5 @@
-import { getNav } from "@/lib/content";
-import { DocsSidebar } from "@/components/DocsSidebar";
+import { getNav } from "@/features/docs/lib/content";
+import { DocsSidebar } from "@/features/docs/components/DocsSidebar";
 
 export default function DocsLayout({
   children,

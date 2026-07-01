@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getNav } from "@/lib/content";
+import { getNav } from "@/features/docs/lib/content";
 
 export const metadata = { title: "Cẩm nang" };
 

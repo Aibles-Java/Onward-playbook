@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAllDocs, getDocBySlug } from "@/lib/content";
-import { MarkdownRenderer } from "@/components/MarkdownRenderer";
+import { getAllDocs, getDocBySlug } from "@/features/docs/lib/content";
+import { MarkdownRenderer } from "@/features/docs/components/MarkdownRenderer";
 
 export function generateStaticParams() {
   return getAllDocs().map((doc) => ({ slug: doc.slug }));

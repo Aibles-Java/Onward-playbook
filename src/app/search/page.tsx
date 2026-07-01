@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { search } from "@/lib/search";
+import { search } from "@/features/search/lib/search";
 
 export const metadata = { title: "Tìm kiếm" };
 

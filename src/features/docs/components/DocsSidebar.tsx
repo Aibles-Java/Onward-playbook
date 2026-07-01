@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { NavCategory } from "@/lib/content";
+import type { NavCategory } from "@/features/docs/lib/content";
 
 export function DocsSidebar({ nav }: { nav: NavCategory[] }) {
   const pathname = usePathname();

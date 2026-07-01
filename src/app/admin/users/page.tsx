@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SEED_USERS, type Role, type User } from "@/lib/users";
+import { SEED_USERS, type Role, type User } from "@/features/admin/lib/users";
 
 let idSeq = 100;
 

@@ -1,5 +1,5 @@
-import { getAllDocs } from "./content";
-import { GLOSSARY, type Term } from "./glossary";
+import { getAllDocs } from "@/features/docs/lib/content";
+import { GLOSSARY, type Term } from "@/features/glossary/lib/glossary";
 
 /**
  * Tìm kiếm & tra cứu (UC_Search / FR-05).

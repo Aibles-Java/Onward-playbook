@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { GLOSSARY, searchGlossary } from "@/lib/glossary";
+import { GLOSSARY, searchGlossary } from "@/features/glossary/lib/glossary";
 
 const CATEGORIES = ["Tất cả", "Onward", "Nghiệp vụ", "Kỹ thuật"] as const;
 
