@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-accent: #10b981;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  ::selection {
+    background-color: rgba(37, 99, 235, 0.15);
+  }
+}
+
+@layer components {
+  /* Nút hành động chính = primary blue (theo brand: CTA luôn là blue, không phải green) */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-primary px-5 py-2.5
+           font-semibold text-white shadow-card transition
+           hover:bg-primary-dark hover:shadow-card-hover
+           focus:outline-none focus:ring-2 focus:ring-primary/40 active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white
+           px-5 py-2.5 font-semibold text-text transition
+           hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20;
+  }
+
+  .card {
+    @apply rounded-lg border border-slate-200/70 bg-white p-6 shadow-card;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-caption font-medium;
+  }
+}
+
+/* ---------- Prose: hiển thị nội dung Markdown đã đồng bộ ---------- */
+.prose-onward {
+  @apply max-w-none text-body text-text;
+}
+.prose-onward h1 {
+  @apply mb-4 mt-2 text-[28px] font-bold leading-9 tracking-tight text-text;
+}
+.prose-onward h2 {
+  @apply mb-3 mt-10 border-b border-slate-200 pb-2 text-h2 font-semibold text-text;
+}
+.prose-onward h3 {
+  @apply mb-2 mt-6 text-lg font-semibold text-text;
+}
+.prose-onward p {
+  @apply my-4 leading-7 text-slate-700;
+}
+.prose-onward a {
+  @apply font-medium text-primary underline-offset-2 hover:underline;
+}
+.prose-onward ul {
+  @apply my-4 list-disc space-y-1.5 pl-6 text-slate-700;
+}
+.prose-onward ol {
+  @apply my-4 list-decimal space-y-1.5 pl-6 text-slate-700;
+}
+.prose-onward blockquote {
+  @apply my-5 rounded-r-md border-l-4 border-accent bg-emerald-50/60 py-2 pl-4 pr-3 italic text-slate-700;
+}
+.prose-onward code:not(pre code) {
+  @apply rounded bg-slate-100 px-1.5 py-0.5 text-[0.9em] font-medium text-primary-dark;
+}
+.prose-onward pre {
+  @apply my-5 overflow-x-auto rounded-md bg-slate-900 p-4 text-sm leading-6 text-slate-100;
+}
+.prose-onward table {
+  @apply my-5 w-full border-collapse overflow-hidden rounded-md text-sm;
+}
+.prose-onward th {
+  @apply border border-slate-200 bg-slate-50 px-3 py-2 text-left font-semibold text-text;
+}
+.prose-onward td {
+  @apply border border-slate-200 px-3 py-2 align-top text-slate-700;
+}
+.prose-onward img,
+.prose-onward svg {
+  @apply my-5 max-w-full rounded-md;
+}
+.prose-onward hr {
+  @apply my-8 border-slate-200;
+}
