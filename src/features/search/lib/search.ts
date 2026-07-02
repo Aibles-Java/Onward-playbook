@@ -1,10 +1,27 @@
-import { getAllDocs } from "@/features/docs/lib/content";
-import { GLOSSARY, type Term } from "@/features/glossary/lib/glossary";
+import type { Term } from "@/features/glossary/lib/glossary";
 
 /**
  * Tìm kiếm & tra cứu (UC_Search / FR-05).
  * Tìm theo tiêu đề + nội dung tài liệu và thuật ngữ, xếp theo độ liên quan.
+ *
+ * Hàm search hoạt động trên một "index" đã dựng sẵn (serializable) để chạy
+ * được ở client — không đọc filesystem. Index được build ở server lúc render
+ * trang (xem src/app/search/page.tsx) rồi truyền xuống client component.
  */
+
+export type DocEntry = {
+  title: string;
+  href: string;
+  description: string;
+  category: string;
+  tags: string[];
+  content: string;
+};
+
+export type SearchIndex = {
+  docs: DocEntry[];
+  terms: Term[];
+};
 
 export type DocHit = {
   kind: "doc";
@@ -30,13 +47,13 @@ function makeSnippet(body: string, q: string): string {
   return (start > 0 ? "…" : "") + body.slice(start, idx + 100).trim() + "…";
 }
 
-export function search(query: string): SearchResult[] {
+export function searchIndex(index: SearchIndex, query: string): SearchResult[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
 
   const results: SearchResult[] = [];
 
-  for (const doc of getAllDocs()) {
+  for (const doc of index.docs) {
     const title = doc.title.toLowerCase();
     const body = doc.content.toLowerCase();
     let score = 0;
@@ -56,7 +73,7 @@ export function search(query: string): SearchResult[] {
     }
   }
 
-  for (const term of GLOSSARY) {
+  for (const term of index.terms) {
     let score = 0;
     if (term.term.toLowerCase().includes(q)) score += 12;
     if (term.short.toLowerCase().includes(q)) score += 5;
