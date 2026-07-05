@@ -10,7 +10,7 @@ tags: [kiến-trúc, ci-cd]
 Playbook theo mô hình **Docs-as-Code**: nội dung tách khỏi nền tảng hiển thị để dễ
 bảo trì độc lập.
 
-<svg viewBox="0 0 640 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Luồng Docs-as-Code: viết Markdown → push GitHub → CI/CD build → Playbook → người đọc">
+<svg viewBox="0 0 730 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Luồng Docs-as-Code: viết Markdown → push GitHub → CI/CD build → Playbook → người đọc">
   <defs>
     <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
       <path d="M0,0 L6,3 L0,6 Z" fill="#64748B"/>
@@ -29,9 +29,13 @@ bảo trì độc lập.
     <rect x="460" y="55" width="110" height="44" rx="8" fill="#EFF6FF" stroke="#2563EB"/>
     <text x="515" y="73" fill="#1D4ED8">Playbook</text>
     <text x="515" y="89" fill="#64748B" font-size="10">trang đã render</text>
+    <rect x="610" y="55" width="110" height="44" rx="8" fill="#F8FAFC" stroke="#94A3B8"/>
+    <text x="665" y="73" fill="#0F172A">Người đọc</text>
+    <text x="665" y="89" fill="#64748B" font-size="10">đọc tài liệu</text>
     <line x1="120" y1="77" x2="156" y2="77" stroke="#64748B" marker-end="url(#a2)"/>
     <line x1="270" y1="77" x2="306" y2="77" stroke="#64748B" marker-end="url(#a2)"/>
     <line x1="420" y1="77" x2="456" y2="77" stroke="#64748B" marker-end="url(#a2)"/>
+    <line x1="570" y1="77" x2="606" y2="77" stroke="#64748B" marker-end="url(#a2)"/>
   </g>
 </svg>
 
