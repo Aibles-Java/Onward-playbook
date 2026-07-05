@@ -1,6 +1,6 @@
 import { getAllDocs } from "@/features/docs/lib/content";
 import { GLOSSARY } from "@/features/glossary/lib/glossary";
-import type { SearchIndex } from "@/features/search/lib/search";
+import { toPlainText, type SearchIndex } from "@/features/search/lib/search";
 import { SearchClient } from "@/features/search/components/SearchClient";
 
 export const metadata = { title: "Tìm kiếm" };
@@ -14,7 +14,7 @@ export default function SearchPage() {
       description: d.description,
       category: d.category,
       tags: d.tags,
-      content: d.content,
+      content: toPlainText(d.content),
     })),
     terms: GLOSSARY,
   };

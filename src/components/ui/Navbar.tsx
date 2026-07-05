@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { NavSearch } from "./NavSearch";
+import { MobileMenu } from "./MobileMenu";
 
 const links = [
   { href: "/docs", label: "Cẩm nang" },
@@ -11,7 +12,7 @@ const links = [
 export function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-bg/85 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6">
+      <div className="relative mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6">
         <Logo />
 
         <nav className="ml-4 hidden items-center gap-1 md:flex">
@@ -28,9 +29,10 @@ export function Navbar() {
 
         <div className="ml-auto flex items-center gap-3">
           <NavSearch />
-          <Link href="/login" className="btn-ghost hidden py-2 sm:inline-flex">
+          <Link href="/login" className="btn-ghost hidden py-2 md:inline-flex">
             Đăng nhập
           </Link>
+          <MobileMenu />
         </div>
       </div>
     </header>

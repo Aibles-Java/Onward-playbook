@@ -40,6 +40,26 @@ export type TermHit = {
 
 export type SearchResult = DocHit | TermHit;
 
+/**
+ * Chuyển Markdown/HTML thô về plain-text để index & hiển thị snippet sạch (fix #2).
+ * Bỏ code block, thẻ HTML/SVG (kèm nội dung svg/script/style), cú pháp Markdown
+ * (**đậm**, #tiêu-đề, [link](url), ...) rồi gộp khoảng trắng.
+ */
+export function toPlainText(markdown: string): string {
+  return markdown
+    .replace(/```[\s\S]*?```/g, " ") // khối code ```
+    .replace(/<(svg|style|script)[\s\S]*?<\/\1>/gi, " ") // svg/script/style + nội dung
+    .replace(/<[^>]+>/g, " ") // thẻ HTML còn lại
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1") // ảnh ![alt](url) → alt
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1") // link [text](url) → text
+    .replace(/^[ \t]*#{1,6}[ \t]+/gm, "") // # tiêu đề
+    .replace(/^[ \t]*>[ \t]?/gm, "") // > blockquote
+    .replace(/^[ \t]*([-*+]|\d+\.)[ \t]+/gm, "") // bullet / số thứ tự
+    .replace(/[*_`~]/g, "") // ký tự nhấn mạnh / inline code
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function makeSnippet(body: string, q: string): string {
   const idx = body.toLowerCase().indexOf(q);
   if (idx === -1) return body.slice(0, 140).trim() + "…";

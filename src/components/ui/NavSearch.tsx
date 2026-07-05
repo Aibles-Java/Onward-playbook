@@ -1,11 +1,23 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function NavSearch() {
   const router = useRouter();
   const [q, setQ] = useState("");
+  // Placeholder ngắn ở mobile để không bị cắt chữ; dài ở md+ (fix #6).
+  // Khởi tạo bản ngắn để khớp SSR, rồi cập nhật theo viewport sau khi mount.
+  const [placeholder, setPlaceholder] = useState("Tìm kiếm…");
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () =>
+      setPlaceholder(mq.matches ? "Tìm tài liệu, thuật ngữ…" : "Tìm kiếm…");
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   return (
     <form
@@ -37,11 +49,11 @@ export function NavSearch() {
         type="search"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Tìm tài liệu, thuật ngữ…"
+        placeholder={placeholder}
         aria-label="Tìm kiếm"
-        className="w-40 rounded-md border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-text
-                   placeholder:text-text-muted focus:w-56 focus:border-primary/40 focus:outline-none
-                   focus:ring-2 focus:ring-primary/15 md:w-52"
+        className="w-36 rounded-md border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-text
+                   placeholder:text-text-muted focus:border-primary/40 focus:outline-none
+                   focus:ring-2 focus:ring-primary/15 sm:w-44 md:w-52 md:focus:w-64"
       />
     </form>
   );

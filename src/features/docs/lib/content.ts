@@ -86,7 +86,15 @@ export function getAllDocs(): Doc[] {
     } satisfies Doc;
   });
 
-  _cache = docs.sort((a, b) => a.order - b.order);
+  // Thứ tự phẳng phải khớp sidebar (getNav): nhóm theo thứ tự category, rồi tới
+  // order của từng bài — nhờ vậy prev/next đi đúng trình tự menu (fix #4).
+  _cache = docs.sort((a, b) => {
+    const ca = CATEGORY_META[a.category]?.order ?? 999;
+    const cb = CATEGORY_META[b.category]?.order ?? 999;
+    if (ca !== cb) return ca - cb;
+    if (a.order !== b.order) return a.order - b.order;
+    return a.href.localeCompare(b.href);
+  });
   return _cache;
 }
 

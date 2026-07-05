@@ -20,19 +20,15 @@ bảo trì độc lập.
     <rect x="10"  y="55" width="110" height="44" rx="8" fill="#F8FAFC" stroke="#94A3B8"/>
     <text x="65"  y="73" fill="#0F172A">Content Writer</text>
     <text x="65"  y="89" fill="#64748B" font-size="10">viết Markdown</text>
-
     <rect x="160" y="55" width="110" height="44" rx="8" fill="#EFF6FF" stroke="#2563EB"/>
     <text x="215" y="73" fill="#1D4ED8">GitHub repo</text>
     <text x="215" y="89" fill="#64748B" font-size="10">push / merge</text>
-
     <rect x="310" y="55" width="110" height="44" rx="8" fill="#ECFDF5" stroke="#10B981"/>
     <text x="365" y="73" fill="#047857">CI/CD build</text>
     <text x="365" y="89" fill="#64748B" font-size="10">trigger tự động</text>
-
     <rect x="460" y="55" width="110" height="44" rx="8" fill="#EFF6FF" stroke="#2563EB"/>
     <text x="515" y="73" fill="#1D4ED8">Playbook</text>
     <text x="515" y="89" fill="#64748B" font-size="10">trang đã render</text>
-
     <line x1="120" y1="77" x2="156" y2="77" stroke="#64748B" marker-end="url(#a2)"/>
     <line x1="270" y1="77" x2="306" y2="77" stroke="#64748B" marker-end="url(#a2)"/>
     <line x1="420" y1="77" x2="456" y2="77" stroke="#64748B" marker-end="url(#a2)"/>

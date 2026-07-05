@@ -1,9 +1,9 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Chạy khi push vào nhánh feat/playbook-web.
+  # Chạy khi push vào nhánh main.
   push:
-    branches: [feat/playbook-web]
+    branches: [main]
   # Cho phép chạy thủ công từ tab Actions.
   workflow_dispatch:
 

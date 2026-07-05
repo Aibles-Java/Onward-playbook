@@ -108,15 +108,22 @@ export default function AdminUsersPage() {
             </button>
           </form>
 
+          {/* Gợi ý cuộn ngang trên mobile (fix #5) */}
+          <p className="mt-6 text-caption text-text-muted lg:hidden">
+            ← Vuốt ngang bảng để xem đầy đủ thao tác →
+          </p>
+
           {/* Bảng người dùng */}
-          <div className="card mt-6 overflow-x-auto p-0">
-            <table className="w-full text-sm">
+          <div className="card mt-2 overflow-x-auto p-0 lg:mt-6">
+            <table className="w-full min-w-[640px] text-sm">
               <thead>
                 <tr className="border-b border-slate-200 text-left text-text-muted">
-                  <th className="px-4 py-3 font-semibold">Người dùng</th>
-                  <th className="px-4 py-3 font-semibold">Vai trò</th>
-                  <th className="px-4 py-3 font-semibold">Trạng thái</th>
-                  <th className="px-4 py-3 text-right font-semibold">Thao tác</th>
+                  <th className="whitespace-nowrap px-4 py-3 font-semibold">Người dùng</th>
+                  <th className="whitespace-nowrap px-4 py-3 font-semibold">Vai trò</th>
+                  <th className="whitespace-nowrap px-4 py-3 font-semibold">Trạng thái</th>
+                  <th className="whitespace-nowrap px-4 py-3 text-right font-semibold">
+                    Thao tác
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -142,13 +149,13 @@ export default function AdminUsersPage() {
                         className={`badge ${
                           u.active
                             ? "bg-emerald-100 text-success"
-                            : "bg-slate-100 text-text-muted"
+                            : "bg-red-100 text-error"
                         }`}
                       >
                         {u.active ? "Hoạt động" : "Khóa"}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="whitespace-nowrap px-4 py-3">
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => toggleRole(u.id)}
