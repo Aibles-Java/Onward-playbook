@@ -783,6 +783,10 @@ Mã thoát: 124
 Mã thoát `124` nghĩa là `timeout` đã phải dừng chương trình vì nó không tự kết thúc. **Cách sửa:** xoá
 dấu `;` ngay sau `)`. Lỗi tương tự cũng xảy ra với `if (...);`.
 
+> 💡 Lệnh `timeout` có sẵn trên Linux. macOS không có sẵn lệnh này: bạn cài bằng
+> `brew install coreutils`, khi đó lệnh có thể mang tên `gtimeout`. Trên Windows, hoặc đơn giản nhất
+> trên mọi hệ điều hành, bạn chỉ cần chạy `java Semi.java` rồi bấm **Ctrl + C** để dừng chương trình.
+
 ---
 
 ## 5. Vòng lặp `for`, for-each, `break` và `continue`
