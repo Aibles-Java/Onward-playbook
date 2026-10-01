@@ -233,7 +233,7 @@ ls out/vn/onward/bank
 TransactionStatus.class
 ```
 
-<svg viewBox="0 0 740 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Từ mã nguồn tới chương trình chạy. Bên trái là thư mục src chứa cây vn/onward/bank với các file Account.java, SavingAccount.java, CheckingAccount.java, Transaction.java, TransactionStatus.java và thư mục con app chứa BankDemo.java. Tên thư mục trùng với tên package: package vn.onward.bank nằm ở vn/onward/bank, package vn.onward.bank.app nằm ở vn/onward/bank/app. Mũi tên javac -d out đi sang phải tới thư mục out, nơi javac tự tạo đúng cây thư mục theo package và đặt các file .class, kể cả Transaction$Type.class cho enum lồng. Phía dưới: lệnh java -cp out vn.onward.bank.app.BankDemo chạy chương trình bằng tên đầy đủ gồm package cộng tên class.">
+<svg viewBox="0 0 740 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Từ mã nguồn tới chương trình chạy. Bên trái là thư mục src chứa cây vn/onward/bank với các file Account.java, SavingAccount.java, CheckingAccount.java, Transaction.java, TransactionStatus.java và thư mục con app chứa BankDemo.java. Tên thư mục trùng với tên package: package vn.onward.bank nằm ở vn/onward/bank, package vn.onward.bank.app nằm ở vn/onward/bank/app. Mũi tên javac -d out đi sang phải tới thư mục out, nơi javac tự tạo đúng cây thư mục theo package và đặt các file .class, kể cả Transaction&#36;Type.class cho enum lồng. Phía dưới: lệnh java -cp out vn.onward.bank.app.BankDemo chạy chương trình bằng tên đầy đủ gồm package cộng tên class.">
   <defs>
     <marker id="c2b8-build-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
       <path d="M0,0 L6,3 L0,6 Z" fill="#64748B"/>
@@ -265,7 +265,7 @@ TransactionStatus.class
       <text x="460" y="96">SavingAccount.class</text>
       <text x="460" y="114">CheckingAccount.class</text>
       <text x="460" y="132">Transaction.class</text>
-      <text x="460" y="150">Transaction$Type.class</text>
+      <text x="460" y="150">Transaction&#36;Type.class</text>
       <text x="460" y="170">app/</text>
       <text x="480" y="188">BankDemo.class</text>
     </g>
