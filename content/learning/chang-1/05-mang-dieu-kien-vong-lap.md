@@ -507,7 +507,7 @@ Khách chỉ chọn "Rút tiền", nhưng máy làm cả ba việc. Java biên d
 
 Từ Java 14, `switch` có cú pháp mới với mũi tên `->` [6]:
 
-- Mỗi nhánh `->` chỉ chạy đúng phần của mình, **không bao giờ rơi xuống**. Không cần `break`.
+- Mỗi nhánh `->` chỉ chạy đúng phần của nó, **không bao giờ rơi xuống**. Không cần `break`.
 - Một `case` có thể gom nhiều nhãn: `case "LOAN", "CREDIT" ->`.
 - `switch` có thể là một **biểu thức** (*expression*): nó **trả về một giá trị** để gán cho biến.
 - Khi một nhánh cần nhiều lệnh, bọc trong `{ }` và dùng `yield giá_trị;` để trả kết quả.
@@ -756,9 +756,32 @@ Tháng 3: 0
 `saved += monthlyDeposit;`.
 
 **Lỗi 2: dấu `;` thừa sau `while`.** Viết `while (saved < goal);` thì thân vòng lặp là một **lệnh rỗng**.
-Khối `{ }` bên dưới không còn thuộc về `while`. Chương trình treo im lặng, không in gì. Mình đã chạy thử
-và phải dừng nó sau 3 giây. **Cách sửa:** xoá dấu `;` ngay sau `)`. Lỗi tương tự cũng xảy ra với
-`if (...);`.
+Khối `{ }` bên dưới không còn thuộc về `while`, nó chỉ là một khối lệnh bình thường đứng sau vòng lặp.
+
+```java
+public class Semi {
+    public static void main(String[] args) {
+        long goal = 10_000_000;
+        long saved = 0;
+        while (saved < goal); // dấu ; thừa: thân vòng lặp là lệnh rỗng
+        {
+            saved += 3_000_000;
+        }
+        System.out.println("Xong");
+    }
+}
+```
+
+Chương trình treo im lặng, không in gì, kể cả chữ `Xong`: `saved` mãi là `0` nên điều kiện mãi đúng.
+Chạy với lệnh `timeout 3` (tự dừng chương trình sau 3 giây) để thấy điều đó:
+
+```text
+$ timeout 3 java Semi.java; echo "Mã thoát: $?"
+Mã thoát: 124
+```
+
+Mã thoát `124` nghĩa là `timeout` đã phải dừng chương trình vì nó không tự kết thúc. **Cách sửa:** xoá
+dấu `;` ngay sau `)`. Lỗi tương tự cũng xảy ra với `if (...);`.
 
 ---
 
@@ -1076,10 +1099,10 @@ Giao dịch lớn nhất: 3000000
 
 ### Lớp tiện ích `java.util.Arrays`
 
-Java có sẵn lớp `Arrays` với nhiều hàm tiện cho mảng [10]. Dòng `import java.util.Arrays;` ở đầu file
-báo cho Java biết bạn muốn dùng lớp này (nó nằm trong gói `java.util`).
+Java có sẵn lớp `Arrays` với nhiều phương thức tiện cho mảng [10]. Dòng `import java.util.Arrays;` ở đầu file
+báo cho Java biết bạn muốn dùng lớp này (nó nằm trong **gói** (*package*) `java.util`, tức một nhóm các lớp có liên quan).
 
-| Hàm | Làm gì |
+| Phương thức | Làm gì |
 |-----|--------|
 | `Arrays.toString(a)` | Trả về chuỗi `[a0, a1, ...]` để in |
 | `Arrays.sort(a)` | Sắp xếp tăng dần, **sửa thẳng** mảng `a` |
@@ -1271,7 +1294,7 @@ Arrays.equals(a, b): true
 5. `Arrays.equals(a, b)` so sánh **từng phần tử**, nên `true` [10].
 
 > 💡 Quy tắc này giống với `String`: với kiểu tham chiếu, `==` hỏi "có phải **cùng một** vật không?",
-> còn hàm `equals` hỏi "nội dung có **giống nhau** không?".
+> còn phương thức `equals` hỏi "nội dung có **giống nhau** không?".
 
 ### Mảng 2 chiều: bảng số dư theo tháng × tài khoản
 
@@ -1445,7 +1468,7 @@ public class ScannerDemo {
 }
 ```
 
-Mình kiểm chứng bằng cách **đưa sẵn dữ liệu nhập qua pipe** (`|`), giả lập người dùng gõ 3 dòng:
+Để kiểm chứng, ta **đưa sẵn dữ liệu nhập qua pipe** (`|`), giả lập người dùng gõ 3 dòng:
 `Nguyen Van An`, `muoi hai`, `12`:
 
 ```text
@@ -1460,7 +1483,7 @@ Nguyen Van An gửi kỳ hạn 12 tháng
 ```
 
 Vì dữ liệu đến từ pipe, phần "bạn gõ" không hiện lên màn hình, nên các lời nhắc nằm sát nhau trên một
-dòng. Khi chạy thật và tự gõ, bạn sẽ thấy chữ mình gõ xen giữa.
+dòng. Khi chạy thật và tự gõ, bạn sẽ thấy chữ bạn gõ xen giữa.
 
 **Giải thích từng bước:**
 
@@ -1582,42 +1605,54 @@ amount = 500000, note = [Tra tien nha]
 Giờ ghép mọi thứ của bài lại. Menu chạy trong `while`, lựa chọn đi vào `switch`, việc duyệt rút tiền
 dùng `if / else if`, còn `?:` quyết định cộng hay trừ.
 
-<svg viewBox="0 0 720 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Luồng mini ATM. Vòng lặp while in menu. Nếu hasNextInt sai thì bỏ từ sai và continue quay lại menu. Nếu đúng thì đọc option và đưa vào switch: 1 in số dư, 2 hoặc 3 nạp hoặc rút, 0 đặt running bằng false để thoát, giá trị khác báo không có chức năng. Sau mỗi lựa chọn, vòng lặp quay lại menu khi running còn true.">
+<svg viewBox="0 0 740 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Luồng mini ATM. Bắt đầu, kiểm tra running: sai thì in lời cảm ơn và kết thúc. Đúng thì in menu và hỏi hasNextInt: sai thì bỏ từ sai và continue, quay lại kiểm tra running. Đúng thì đọc option bằng nextInt và đưa vào switch: 1 in số dư, 2 hoặc 3 nạp hoặc rút, 0 đặt running bằng false, giá trị khác báo lỗi. Mọi nhánh đều quay lại kiểm tra running; sau khi chọn 0 thì running là false nên chương trình đi ra nhánh kết thúc.">
   <defs>
     <marker id="b5-atm-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#64748B"/></marker>
   </defs>
   <g font-family="sans-serif" font-size="12" text-anchor="middle">
-    <rect x="15" y="92" width="110" height="40" rx="8" fill="#F8FAFC" stroke="#94A3B8"/>
-    <text x="70" y="109" fill="#0F172A">In menu</text>
-    <text x="70" y="124" fill="#64748B" font-size="11">while (running)</text>
-    <polygon points="160,112 235,82 310,112 235,142" fill="#EFF6FF" stroke="#2563EB"/>
-    <text x="235" y="116" fill="#1D4ED8" font-family="monospace">hasNextInt()?</text>
-    <rect x="165" y="10" width="140" height="36" rx="8" fill="#FFFBEB" stroke="#D97706"/>
-    <text x="235" y="26" fill="#D97706">bỏ từ sai</text>
-    <text x="235" y="40" fill="#D97706" font-family="monospace" font-size="11">continue</text>
-    <rect x="345" y="90" width="120" height="44" rx="8" fill="#EFF6FF" stroke="#2563EB"/>
-    <text x="405" y="109" fill="#1D4ED8" font-family="monospace">nextInt()</text>
-    <text x="405" y="125" fill="#1D4ED8" font-family="monospace">switch</text>
-    <rect x="510" y="8" width="200" height="34" rx="6" fill="#ECFDF5" stroke="#10B981"/>
-    <text x="610" y="29" fill="#047857">1 → in số dư</text>
-    <rect x="510" y="54" width="200" height="34" rx="6" fill="#ECFDF5" stroke="#10B981"/>
-    <text x="610" y="75" fill="#047857">2, 3 → nạp / rút</text>
-    <rect x="510" y="100" width="200" height="34" rx="6" fill="#F8FAFC" stroke="#94A3B8"/>
-    <text x="610" y="121" fill="#0F172A">0 → running = false</text>
-    <rect x="510" y="146" width="200" height="34" rx="6" fill="#FEF2F2" stroke="#DC2626"/>
-    <text x="610" y="167" fill="#DC2626">khác → báo lỗi</text>
-    <line x1="125" y1="112" x2="158" y2="112" stroke="#64748B" marker-end="url(#b5-atm-arrow)"/>
-    <line x1="310" y1="112" x2="343" y2="112" stroke="#64748B" marker-end="url(#b5-atm-arrow)"/>
-    <text x="326" y="105" fill="#64748B" font-size="11">đúng</text>
-    <line x1="235" y1="82" x2="235" y2="48" stroke="#64748B" marker-end="url(#b5-atm-arrow)"/>
-    <text x="245" y="68" fill="#64748B" font-size="11" text-anchor="start">sai</text>
-    <path d="M165,28 H70 V90" fill="none" stroke="#D97706" marker-end="url(#b5-atm-arrow)"/>
-    <line x1="465" y1="112" x2="508" y2="25" stroke="#64748B"/>
-    <line x1="465" y1="112" x2="508" y2="71" stroke="#64748B"/>
-    <line x1="465" y1="112" x2="508" y2="117" stroke="#64748B"/>
-    <line x1="465" y1="112" x2="508" y2="163" stroke="#64748B"/>
-    <path d="M610,180 V210 H70 V134" fill="none" stroke="#64748B" marker-end="url(#b5-atm-arrow)"/>
-    <text x="340" y="204" fill="#64748B" font-size="11">hết switch → quay lại kiểm tra running (0 thì thoát)</text>
+    <text x="95" y="22" fill="#0F172A">Bắt đầu</text>
+    <line x1="95" y1="30" x2="95" y2="88" stroke="#64748B" marker-end="url(#b5-atm-arrow)"/>
+    <polygon points="30,120 95,90 160,120 95,150" fill="#EFF6FF" stroke="#2563EB"/>
+    <text x="95" y="124" fill="#1D4ED8" font-family="monospace">running ?</text>
+    <rect x="30" y="200" width="130" height="36" rx="18" fill="#F8FAFC" stroke="#94A3B8"/>
+    <text x="95" y="222" fill="#0F172A">Cảm ơn, kết thúc</text>
+    <line x1="95" y1="150" x2="95" y2="198" stroke="#64748B" marker-end="url(#b5-atm-arrow)"/>
+    <text x="105" y="178" fill="#64748B" font-size="11" text-anchor="start">sai</text>
+    <rect x="190" y="100" width="100" height="40" rx="8" fill="#F8FAFC" stroke="#94A3B8"/>
+    <text x="240" y="124" fill="#0F172A">In menu</text>
+    <line x1="160" y1="120" x2="188" y2="120" stroke="#64748B" marker-end="url(#b5-atm-arrow)"/>
+    <text x="174" y="112" fill="#64748B" font-size="11">đúng</text>
+    <polygon points="300,120 370,90 440,120 370,150" fill="#EFF6FF" stroke="#2563EB"/>
+    <text x="370" y="124" fill="#1D4ED8" font-family="monospace" font-size="11">hasNextInt()?</text>
+    <line x1="290" y1="120" x2="298" y2="120" stroke="#64748B" marker-end="url(#b5-atm-arrow)"/>
+    <rect x="310" y="20" width="120" height="40" rx="8" fill="#FFFBEB" stroke="#D97706"/>
+    <text x="370" y="37" fill="#D97706">bỏ từ sai</text>
+    <text x="370" y="52" fill="#D97706" font-family="monospace" font-size="11">continue</text>
+    <line x1="370" y1="90" x2="370" y2="62" stroke="#64748B" marker-end="url(#b5-atm-arrow)"/>
+    <text x="380" y="80" fill="#64748B" font-size="11" text-anchor="start">sai</text>
+    <rect x="470" y="98" width="90" height="44" rx="8" fill="#EFF6FF" stroke="#2563EB"/>
+    <text x="515" y="116" fill="#1D4ED8" font-family="monospace">nextInt()</text>
+    <text x="515" y="132" fill="#1D4ED8" font-family="monospace">switch</text>
+    <line x1="440" y1="120" x2="468" y2="120" stroke="#64748B" marker-end="url(#b5-atm-arrow)"/>
+    <text x="454" y="112" fill="#64748B" font-size="11">đúng</text>
+    <rect x="580" y="60" width="130" height="32" rx="6" fill="#ECFDF5" stroke="#10B981"/>
+    <text x="645" y="80" fill="#047857">1 → in số dư</text>
+    <rect x="580" y="100" width="130" height="32" rx="6" fill="#ECFDF5" stroke="#10B981"/>
+    <text x="645" y="120" fill="#047857">2, 3 → nạp / rút</text>
+    <rect x="580" y="140" width="130" height="32" rx="6" fill="#F8FAFC" stroke="#94A3B8"/>
+    <text x="645" y="160" fill="#0F172A" font-size="11">0 → running = false</text>
+    <rect x="580" y="180" width="130" height="32" rx="6" fill="#FEF2F2" stroke="#DC2626"/>
+    <text x="645" y="200" fill="#DC2626">khác → báo lỗi</text>
+    <line x1="560" y1="120" x2="578" y2="76" stroke="#64748B"/>
+    <line x1="560" y1="120" x2="578" y2="116" stroke="#64748B"/>
+    <line x1="560" y1="120" x2="578" y2="156" stroke="#64748B"/>
+    <line x1="560" y1="120" x2="578" y2="196" stroke="#64748B"/>
+    <path d="M430,40 H728 V280 H12 V120 H28" fill="none" stroke="#64748B" marker-end="url(#b5-atm-arrow)"/>
+    <line x1="710" y1="76" x2="728" y2="76" stroke="#64748B"/>
+    <line x1="710" y1="116" x2="728" y2="116" stroke="#64748B"/>
+    <line x1="710" y1="156" x2="728" y2="156" stroke="#64748B"/>
+    <line x1="710" y1="196" x2="728" y2="196" stroke="#64748B"/>
+    <text x="370" y="272" fill="#64748B" font-size="11">mọi nhánh (kể cả continue) quay lại kiểm tra running · chọn 0 thì running = false nên thoát</text>
   </g>
 </svg>
 
@@ -1662,7 +1697,7 @@ public class Atm {
 }
 ```
 
-Mình chạy thử bằng một kịch bản: xem số dư, nạp 1,5 triệu, rút 10 triệu (không đủ), rút 2 triệu, gõ
+Bạn có thể chạy thử bằng một kịch bản: xem số dư, nạp 1,5 triệu, rút 10 triệu (không đủ), rút 2 triệu, gõ
 nhầm `abc`, chọn số `9` không có trong menu, xem số dư, rồi thoát:
 
 ```text
