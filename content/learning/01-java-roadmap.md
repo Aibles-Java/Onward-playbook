@@ -86,6 +86,17 @@ Tài liệu nổi bật:
 - Bộ OOP của Jenkov (classes, inheritance, interfaces, enums, records) [8]
 - Baeldung: *Java is Pass-by-Value* [10], *Static and Dynamic Binding* [11]
 
+**📚 Bài học chi tiết của chặng 2:**
+
+1. [Package và access modifier](/docs/learning/chang-2/package-va-access-modifier): Packages, Access Specifiers
+2. [Đóng gói và method](/docs/learning/chang-2/dong-goi-va-method): Attributes and Methods, Encapsulation, Method Overloading, Method Chaining
+3. [static, final và vòng đời object](/docs/learning/chang-2/static-final-vong-doi-object): Static Keyword, Final Keyword, Initializer Block, Object Lifecycle
+4. [Kế thừa và ghi đè method](/docs/learning/chang-2/ke-thua-va-ghi-de): Inheritance, Method Overriding
+5. [Trừu tượng và interface](/docs/learning/chang-2/truu-tuong-va-interface): Abstraction, Interfaces
+6. [Binding và truyền tham số](/docs/learning/chang-2/binding-va-truyen-tham-so): Static vs Dynamic Binding, Pass by Value / Pass by Reference
+7. [Enum, record và nested class](/docs/learning/chang-2/enum-record-nested-class): Enums, Record, Nested Classes
+8. [Checkpoint: mô hình hoá tài khoản ngân hàng](/docs/learning/chang-2/checkpoint-mo-hinh-tai-khoan): bài tổng hợp
+
 **✅ Checkpoint:** mô hình hoá `Account`, `SavingAccount`, `Transaction` (dùng `record`
 cho dữ liệu bất biến và `enum` cho trạng thái giao dịch). Giải thích bằng lời: vì sao
 Java luôn *pass-by-value*, kể cả khi truyền object?
