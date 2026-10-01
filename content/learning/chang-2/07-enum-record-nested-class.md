@@ -119,6 +119,7 @@ ai gọi `new TransactionStatus()` được nữa [1][7].
     <rect x="20" y="230" width="700" height="60" rx="8" fill="#FEF2F2" stroke="#DC2626"/>
     <text x="35" y="252" font-family="monospace" fill="#0F172A">valueOf("completed")</text>
     <text x="35" y="272" fill="#DC2626">chữ thường, không khớp tên hằng số nào → ném IllegalArgumentException</text>
+    <line x1="200" y1="230" x2="197" y2="104" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#c2b7-basics-err)"/>
   </g>
 </svg>
 
@@ -431,7 +432,7 @@ hashCode bằng nhau? true
    cũng tính từ toàn bộ field, nên `t1` và `t2` cho cùng `hashCode()`.
 4. `t1.equals(t3)` là `false` vì `id` khác nhau.
 
-### ⚠️ Lỗi hay gặp
+### Compact constructor: kiểm tra dữ liệu trước khi gán
 
 **Thêm điều kiện hợp lệ bằng cách nào, nếu không được viết constructor bình thường?** Nếu bạn viết
 hẳn `Transaction(String id, BigDecimal amount, TransactionStatus status) { ... }` với đủ 3 tham số,
@@ -521,7 +522,9 @@ note sau    = TransactionNote[transactionId=TXN-001, tags=[the-nam, khan-cap]]
 Muốn bất biến thật sự, bạn tự viết compact constructor để chép dữ liệu thành một bản không sửa
 được, ví dụ `tags = List.copyOf(tags);` — chặng 3 sẽ học `List` kỹ hơn.
 
-**Record có `extends` được một record/class khác không?** Không. Mọi record ngầm định `final` và
+### ⚠️ Lỗi hay gặp
+
+**Cố cho record `extends` một class khác.** Mọi record ngầm định `final` và
 đã kế thừa sẵn `java.lang.Record`; Java chỉ cho đơn kế thừa một class cha (Bài 4 Chặng 2), nên
 record không còn "suất" để `extends` thêm [2][4]:
 
@@ -884,6 +887,24 @@ không gắn với object `Account` nào, nên tạo độc lập bằng `new Ac
 `HighValueFilter` có tên, nhưng chỉ dùng được bên trong method khai báo nó (local class). Lớp
 implement `Greeter` ngay tại `new Greeter() { ... }` không có tên (anonymous class) — nó chỉ tồn
 tại đúng tại biểu thức tạo ra nó, gán thẳng vào biến `greeter`.
+
+</details>
+
+**Câu 8 (Mục tiêu 5).** Bạn khai báo `static class Statement { void print() { System.out.println(id); } }`
+bên trong `Account` (với `id` là field instance của `Account`), và javac báo:
+
+```text
+error: non-static variable id cannot be referenced from a static context
+```
+
+Nguyên nhân là gì, và có mấy cách sửa?
+
+<details><summary>Đáp án</summary>
+
+`Statement` là **static nested class**, không gắn với object `Account` nào, nên không có "`id` của
+ai" để đọc — field instance chỉ tồn tại khi có một object cụ thể (phần 6 Chặng 1). Hai cách sửa:
+(1) bỏ `static` để nó thành inner class, khi đó nó tự có quyền đọc field của object `Account` ngoài;
+hoặc (2) giữ `static` nhưng truyền `id` vào qua tham số constructor của `Statement`.
 
 </details>
 
