@@ -14,6 +14,9 @@ tags: [java, chặng-1, string, math, bigdecimal]
 > - Dự đoán đúng kết quả của `/`, `%`, `++` với số nguyên, và phát hiện tràn số.
 > - Tính phí, tính lãi bằng `BigDecimal` với số chữ số lẻ và cách làm tròn rõ ràng.
 
+Bài này phủ hai chủ đề **Strings and Methods** và **Math Operations** của roadmap Java trên
+roadmap.sh [1]; tài liệu roadmap gợi ý cho hai chủ đề là bài của Jenkov [2] [3].
+
 **Cần biết trước:** [Bài 3 · Kiểu dữ liệu, biến và ép kiểu](/docs/learning/chang-1/kieu-du-lieu-bien-ep-kieu)
 (kiểu `int`, `long`, `double`, khai báo biến, ép kiểu).
 
@@ -32,7 +35,7 @@ tags: [java, chặng-1, string, math, bigdecimal]
 | **RoundingMode** | Quy tắc làm tròn | `HALF_UP`, `HALF_EVEN` |
 
 💡 Tất cả ví dụ chạy được trên JDK 21 trở lên (kể cả Java 25). Lưu mỗi ví dụ thành file
-cùng tên class rồi chạy bằng `java TenFile.java` như bạn đã làm ở bài 2.
+cùng tên class rồi chạy bằng `java TenFile.java` như bạn đã làm ở bài 1.
 
 ---
 
@@ -146,7 +149,7 @@ tài khoản...). Nếu một chỗ sửa được thì mọi chỗ khác đang 
 ```java
 public class TrimStrip {
     public static void main(String[] args) {
-        String name = " An ";               // em space: khoảng trắng Unicode
+        String name = "\u2003An\u2003";               // em space: khoảng trắng Unicode
         System.out.println(name.trim().length());     // trim chỉ bỏ ký tự <= ' '
         System.out.println(name.strip().length());    // strip hiểu khoảng trắng Unicode
 
@@ -168,7 +171,7 @@ public class TrimStrip {
 
 Code không báo lỗi gì, nhưng `input` vẫn còn khoảng trắng. Cách sửa: luôn viết
 `input = input.strip();`. Ví dụ này cũng cho thấy `trim()` không bỏ được khoảng trắng Unicode
-như ` ` (chuỗi vẫn dài 4), còn `strip()` (Java 11+) thì bỏ được (còn 2) [5]. Với dữ liệu
+như `\u2003` (chuỗi vẫn dài 4), còn `strip()` (Java 11+) thì bỏ được (còn 2) [5]. Với dữ liệu
 người dùng gõ vào, hãy ưu tiên `strip()`.
 
 ---
@@ -437,13 +440,12 @@ public class SubstringError {
 
 ```text
 Exception in thread "main" java.lang.StringIndexOutOfBoundsException: Range [-1, 3) out of bounds for length 3
-	at java.base/jdk.internal.util.Preconditions$1.apply(Preconditions.java:55)
 	...
-	at java.base/java.lang.String.substring(String.java:2807)
 	at SubstringError.main(SubstringError.java:4)
 ```
 
-`3 - 4 = -1`, mà chỉ số không được âm. Cách sửa: kiểm tra `length()` trước khi cắt
+`3 - 4 = -1`, mà chỉ số không được âm. Các dòng `at java.base/...` bên trong JDK được rút gọn thành `...` (số dòng của chúng khác nhau tuỳ bản JDK). Dòng quan trọng là dòng cuối, chỉ vào code của bạn.
+Cách sửa: kiểm tra `length()` trước khi cắt
 (câu lệnh `if` học ở bài 5).
 
 **2. `split(".")` ra mảng rỗng.** Vì tham số là regex, và trong regex dấu `.` nghĩa là
@@ -473,7 +475,7 @@ Cách sửa: thoát dấu chấm thành `"\\."`. Các ký tự đặc biệt kh�
 **Ý tưởng nôm na.** Ghép vài chuỗi bằng `+` giống viết vài dòng lên giấy, rất tiện. Nhưng nếu
 phải ghép hàng trăm lần (như in sao kê cả năm), mỗi lần `+` lại "in một tờ mới" và chép lại hết
 nội dung cũ. **`StringBuilder`** thì như một bảng nháp: bạn cứ viết nối thêm vào cuối, xong
-mới chép ra một tờ duy nhất [6].
+mới chép ra một tờ duy nhất [6] [12].
 
 <svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ghép chuỗi nhiều lần. Bên trái: dùng dấu cộng trong vòng lặp, mỗi vòng tạo một String mới và chép lại toàn bộ nội dung cũ: Sao kê:, Sao kê: T1, Sao kê: T1 T2, Sao kê: T1 T2 T3, các bản cũ thành rác. Bên phải: StringBuilder giữ một bộ đệm duy nhất, append nối thêm vào cuối, cuối cùng toString tạo đúng một String.">
   <defs>
@@ -652,7 +654,6 @@ public class FormatWrong {
 
 ```text
 Exception in thread "main" java.util.IllegalFormatConversionException: d != java.lang.Double
-	at java.base/java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:4515)
 	...
 	at FormatWrong.main(FormatWrong.java:4)
 ```
@@ -833,6 +834,10 @@ mà ra `Infinity` (vô cực), còn nguy hiểm hơn vì lỗi bị giấu đi. 
 
 ## 6. Class `Math` và tràn số
 
+[Bài 3](/docs/learning/chang-1/kieu-du-lieu-bien-ep-kieu) đã cho bạn thấy tràn số (*overflow*): số dư
+lưu bằng `int` bỗng thành số âm. Ở đây ta học cách **phát hiện** nó bằng `Math.addExact` và
+`Math.multiplyExact`.
+
 **Ý tưởng nôm na.** **`Math`** là "hộp máy tính" có sẵn trong Java: lấy trị tuyệt đối, so lớn
 nhỏ, luỹ thừa, căn bậc hai, làm tròn [8]. Bạn gọi thẳng qua tên class, như `Math.max(a, b)`,
 không cần tạo gì cả. Nhưng nhớ rằng mỗi kiểu số có **sức chứa** giới hạn, như đồng hồ
@@ -930,7 +935,7 @@ public class OverflowDemo {
 -2147483648
 9000000000
 Exception in thread "main" java.lang.ArithmeticException: integer overflow
-	at java.base/java.lang.Math.addExact(Math.java:911)
+	...
 	at OverflowDemo.main(OverflowDemo.java:9)
 ```
 
@@ -1153,7 +1158,7 @@ public class DivideNoScale {
 
 ```text
 Exception in thread "main" java.lang.ArithmeticException: Non-terminating decimal expansion; no exact representable decimal result.
-	at java.base/java.math.BigDecimal.divide(BigDecimal.java:1783)
+	...
 	at DivideNoScale.main(DivideNoScale.java:7)
 ```
 
@@ -1299,6 +1304,8 @@ kiểu Việt Nam. Thử đổi lãi suất để tìm một trường hợp hai
 > Gợi ý: tạo mọi số bằng `new BigDecimal("...")`; nhân hết rồi mới chia một lần duy nhất bằng
 > `divide(..., 0, RoundingMode.HALF_UP)`. `%,d` không nhận `BigDecimal`; hãy dùng `%,.0f` hoặc
 > đổi bằng `longValueExact()`. Đáp số với `HALF_UP`: `2.350.000 đ`.
+> Để thấy hai cách làm tròn khác nhau, thử lãi suất `0.04700001`: tiền lãi thô là
+> `2350000.5`, `HALF_UP` cho `2.350.001 đ` còn `HALF_EVEN` cho `2.350.000 đ`.
 
 ## Đọc thêm
 
