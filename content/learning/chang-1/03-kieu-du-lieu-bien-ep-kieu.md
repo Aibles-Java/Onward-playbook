@@ -211,7 +211,7 @@ nhiều **bit** (đơn vị nhỏ nhất của bộ nhớ, giá trị 0 hoặc 1
   </g>
 </svg>
 
-Bảng dưới theo JLS §4.2 [1] và Oracle Java Tutorials [7]. Cột "Mặc định" là giá trị Java tự gán cho
+Bảng dưới theo JLS §4.2 [1] và Oracle Java Tutorials [7]. Giá trị chính xác của `long` bạn sẽ thấy khi chạy ví dụ bên dưới. Cột "Mặc định" là giá trị Java tự gán cho
 **field** (biến khai báo trong class, ngoài method; bài 6 học kỹ) [2]. Biến cục bộ **không** có mặc định.
 
 | Kiểu | Kích thước | Khoảng giá trị | Mặc định (field) |
@@ -219,10 +219,10 @@ Bảng dưới theo JLS §4.2 [1] và Oracle Java Tutorials [7]. Cột "Mặc đ
 | `byte` | 8 bit | `-128` .. `127` | `0` |
 | `short` | 16 bit | `-32_768` .. `32_767` | `0` |
 | `int` | 32 bit | `-2_147_483_648` .. `2_147_483_647` (≈ ±2,1 tỷ) | `0` |
-| `long` | 64 bit | `-9_223_372_036_854_775_808` .. `9_223_372_036_854_775_807` (≈ ±9,2 tỷ tỷ) | `0L` |
+| `long` | 64 bit | `-2⁶³` .. `2⁶³ − 1` (≈ ±9,2 tỷ tỷ) | `0L` |
 | `float` | 32 bit | ≈ ±3,4 × 10³⁸, khoảng 6–7 chữ số chính xác | `0.0f` |
 | `double` | 64 bit | ≈ ±1,8 × 10³⁰⁸, khoảng 15–16 chữ số chính xác | `0.0d` |
-| `char` | 16 bit, không dấu | `'\u0000'` .. `'￿'` (0 .. 65535) | `'\u0000'` |
+| `char` | 16 bit, không dấu | `'\u0000'` .. `'\uffff'` (0 .. 65535) | `'\u0000'` |
 | `boolean` | không quy định | `true` hoặc `false` | `false` |
 
 **Literal** là giá trị bạn viết thẳng trong code. Vài quy tắc cần nhớ [1][8]:
@@ -230,8 +230,12 @@ Bảng dưới theo JLS §4.2 [1] và Oracle Java Tutorials [7]. Cột "Mặc đ
 - Số nguyên viết thẳng (`42`) có kiểu `int`. Muốn literal kiểu `long` thì thêm hậu tố **`L`**: `9_000_000_000L`.
   Nên dùng `L` hoa vì `l` thường dễ nhìn nhầm với số `1`.
 - Số có dấu chấm (`5.5`) có kiểu `double`. Muốn `float` thì thêm **`f`**: `5.5f`. Hậu tố `d` cho `double` là tuỳ chọn.
-- Dấu **`_`** được đặt giữa các chữ số để dễ đọc: `1_000_000`. Không đặt ở đầu, cuối hay cạnh dấu chấm.
-- `char` dùng **nháy đơn** và chứa đúng **một** ký tự: `'A'`. Có thể viết mã Unicode: `'₫'` là ký tự `₫`.
+- Dấu **`_`** được đặt giữa các chữ số để dễ đọc: `1_000_000`. Không đặt ở đầu, cuối, cạnh dấu chấm hay cạnh hậu tố: `1_000_L` và `5.5_f` đều bị javac báo `illegal underscore`.
+- `char` dùng **nháy đơn** và chứa đúng **một** ký tự: `'A'`.
+- **Unicode** là bảng mã chung cho chữ viết của cả thế giới: mỗi ký tự được gán một con số, ví dụ `A` là 65,
+  `₫` là 8363. Bạn có thể viết một `char` bằng mã của nó theo cú pháp `'\uXXXX'`: dấu gạch chéo ngược,
+  chữ `u`, rồi đúng 4 chữ số hệ 16 (*hexadecimal*, dùng 0–9 và A–F). Ví dụ `'\u0041'` là `'A'`,
+  còn `'\u20AB'` là `'₫'` (20AB hệ 16 = 8363).
 - `boolean` chỉ nhận `true` hoặc `false`. Không dùng `0`/`1` như một số ngôn ngữ khác.
 
 ```java
@@ -244,7 +248,7 @@ public class PrimitiveTypes {
         float  rateF       = 5.5f;               // hậu tố f: literal kiểu float
         double rateD       = 5.5;                // số thực mặc định là double
         char   grade       = 'A';                // một ký tự, nháy đơn
-        char   dong        = '₫';           // ký tự Unicode: dấu ₫
+        char   dong        = '\u20AB';      // ký tự Unicode: dấu ₫
         boolean isActive   = true;               // chỉ có true hoặc false
 
         System.out.println(pinDigit + " " + branchCode + " " + customers);
@@ -273,7 +277,7 @@ long: -9223372036854775808 .. 9223372036854775807
 1. Mỗi dòng khai báo + khởi tạo một biến với một kiểu khác nhau. Comment ghi lý do chọn kiểu.
 2. `9_000_000_000L` vượt khoảng `int` (≈ 2,1 tỷ) nên **bắt buộc** có `L`.
 3. Khi in, dấu `_` không xuất hiện: nó chỉ tồn tại trong mã nguồn.
-4. `'₫'` được in ra là `₫`. `char` thực chất lưu một **mã số** 16 bit (phần 6 sẽ thấy rõ).
+4. `'\u20AB'` được in ra là `₫`. `char` thực chất lưu một **mã số** 16 bit (phần 6 sẽ thấy rõ).
 5. `Integer.MIN_VALUE`, `Long.MAX_VALUE`... là các hằng có sẵn trong JDK. Dùng chúng thay vì tự gõ số dài.
 
 Muốn kiểm tra giá trị mặc định của field, bạn chạy thử đoạn sau (từ khoá `static` sẽ học ở bài 6):
@@ -317,6 +321,10 @@ TooLarge.java:3: error: integer number too large
 
 **Lỗi 2: gán số có dấu chấm vào `float`.** `5.5` là `double` (64 bit), không tự nhét vừa `float` (32 bit).
 
+```java
+float rate = 5.5;
+```
+
 ```text
 FloatLiteral.java:3: error: incompatible types: possible lossy conversion from double to float
         float rate = 5.5;
@@ -328,12 +336,18 @@ FloatLiteral.java:3: error: incompatible types: possible lossy conversion from d
 
 **Lỗi 3: dùng nháy kép cho `char`.** `"A"` là một chuỗi (`String`), `'A'` mới là ký tự.
 
+```java
+char grade = "A";
+```
+
 ```text
 CharQuote.java:3: error: incompatible types: String cannot be converted to char
         char grade = "A";
                      ^
 1 error
 ```
+
+✅ Cách sửa: `char grade = 'A';`
 
 ---
 
@@ -430,8 +444,9 @@ Nguyen Van A | null
 **Giải thích từng bước.**
 
 1. `long b = a;` chép **giá trị** 1.000.000 sang hộp `b`. Sau đó sửa `b` không ảnh hưởng `a`.
-2. `long[] balances = {...}` tạo một mảng gồm hai số `long` (một object), rồi đặt mũi tên tới nó vào `balances`.
-   `balances[0]` là phần tử đầu tiên (đánh số từ 0).
+2. Cú pháp mảng: `long[]` đọc là "mảng các số `long`"; `{1_000_000, 2_000_000}` liệt kê sẵn các phần tử;
+   `balances[0]` là phần tử ở vị trí 0, tức phần tử đầu tiên (Java đếm từ 0). Dòng này tạo mảng (một object)
+   rồi đặt mũi tên tới nó vào biến `balances`.
 3. `long[] alias = balances;` chép **mũi tên**, không chép mảng. Giờ có hai mũi tên cùng trỏ một mảng.
 4. `alias[0] = 0;` sửa mảng qua `alias`, nên đọc qua `balances` cũng thấy `0`. Giống hai thẻ ATM cùng một tài khoản.
 5. `null` là giá trị đặc biệt của kiểu tham chiếu, nghĩa là "chưa trỏ tới object nào".
@@ -562,6 +577,11 @@ VarNoInit.java:4: error: cannot infer type for local variable nothing
 
 **Lỗi 2: nghĩ `var` đổi kiểu được.** `var amount = 100_000;` đã chốt `int`, gán `2.5` sẽ lỗi.
 
+```java
+var amount = 100_000;     // suy ra int
+amount = 2.5;             // gán double vào int
+```
+
 ```text
 VarTypeFixed.java:4: error: incompatible types: possible lossy conversion from double to int
         amount = 2.5;             // gán double vào int
@@ -570,6 +590,11 @@ VarTypeFixed.java:4: error: incompatible types: possible lossy conversion from d
 ```
 
 **Lỗi 3: gán lại biến `final`.**
+
+```java
+final long dailyLimit = 50_000_000L;
+dailyLimit = 100_000_000L;
+```
 
 ```text
 FinalReassign.java:4: error: cannot assign a value to final variable dailyLimit
@@ -713,7 +738,7 @@ bạn không cần viết gì thêm [6].
 
 Các hướng mở rộng hợp lệ đi theo chiều mũi tên (và nối tiếp được, ví dụ `byte → long`):
 
-<svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chuỗi ép kiểu mở rộng tự động: byte sang short sang int sang long sang float sang double, và char sang int. Các bước an toàn vẽ mũi tên xanh. Ba hướng tự động nhưng có thể mất độ chính xác vẽ nét đứt vàng: int sang float, long sang float, long sang double.">
+<svg viewBox="0 0 720 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chuỗi ép kiểu mở rộng tự động: byte sang short sang int sang long sang float sang double, và char sang int. Các bước an toàn vẽ mũi tên xanh, gồm cả đường int sang double. Ba hướng tự động nhưng có thể mất độ chính xác vẽ nét đứt vàng: int sang float, long sang float, long sang double.">
   <defs>
     <marker id="b3-widen-ok" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
       <path d="M0,0 L6,3 L0,6 Z" fill="#047857"/>
@@ -724,6 +749,9 @@ Các hướng mở rộng hợp lệ đi theo chiều mũi tên (và nối tiế
   </defs>
   <g font-family="sans-serif" font-size="12">
     <text x="20" y="20" fill="#0F172A" font-weight="bold">Tự động theo chiều mũi tên: kiểu hẹp → kiểu rộng</text>
+    <g transform="translate(0,30)">
+    <path d="M285,70 Q467,-10 650,70" fill="none" stroke="#047857" stroke-width="2" marker-end="url(#b3-widen-ok)"/>
+    <text x="467" y="22" text-anchor="middle" fill="#047857" font-size="11">int → double: an toàn, double đủ chỗ cho mọi int</text>
     <path d="M418,70 Q523,22 628,70" fill="none" stroke="#D97706" stroke-dasharray="5 4" marker-end="url(#b3-widen-warn)"/>
     <rect x="20" y="72" width="86" height="40" rx="6" fill="#EFF6FF" stroke="#2563EB"/>
     <text x="63" y="89" text-anchor="middle" fill="#1D4ED8" font-family="monospace" font-size="13">byte</text>
@@ -757,12 +785,14 @@ Các hướng mở rộng hợp lệ đi theo chiều mũi tên (và nối tiế
     <text x="438" y="218" fill="#0F172A" font-size="11">an toàn tuyệt đối</text>
     <line x1="400" y1="232" x2="430" y2="232" stroke="#D97706" stroke-width="2" stroke-dasharray="4 3"/>
     <text x="438" y="236" fill="#0F172A" font-size="11">tự động nhưng có thể mất độ chính xác</text>
+    </g>
   </g>
 </svg>
 
 Chú ý: `float` (32 bit) "rộng" hơn `long` (64 bit) vì nó chứa được số lớn hơn nhiều (≈ 10³⁸),
 nhưng nó chỉ giữ được khoảng 6–7 chữ số chính xác. Vì vậy JLS ghi rõ ba hướng `int → float`,
-`long → float`, `long → double` có thể **mất độ chính xác**, dù vẫn được làm tự động [6].
+`long → float`, `long → double` có thể **mất độ chính xác**, dù vẫn được làm tự động [6]. Ngược lại, `int → double` luôn chính xác: `double` giữ được 53 bit
+phần định trị (*significand*), dư sức chứa mọi giá trị 32 bit của `int`.
 
 ```java
 public class WideningDemo {
@@ -808,7 +838,7 @@ Qua float: 1.2345679E17
 3. `int code = letter;` cho thấy `char` thực ra là một **mã số**: `'A'` có mã 65.
 4. `float asFloat = accountNo;` không báo lỗi, nhưng `float` chỉ giữ ~7 chữ số đầu. Ép ngược lại
    ra `123456790519087104`, sai khác hẳn số gốc. Ký hiệu `E17` nghĩa là "× 10¹⁷".
-5. `16_777_217` (2²⁴ + 1) là số nguyên nhỏ nhất mà `float` không biểu diễn chính xác được, nên thành `16777216`.
+5. `16_777_217` (2²⁴ + 1) là số nguyên dương nhỏ nhất mà `float` không biểu diễn chính xác được, nên thành `16777216`.
 
 ### ⚠️ Lỗi hay gặp
 
@@ -828,7 +858,11 @@ gọi là **ép kiểu thu hẹp** (*narrowing primitive conversion*) [6]. Giố
 
 Java xử lý thu hẹp theo quy tắc cố định:
 
-- **Số thực → số nguyên:** bỏ phần thập phân, **cắt về phía 0**, không làm tròn. Quá lớn thì kẹp về `MAX_VALUE`.
+- **Số thực → `int`/`long`:** bỏ phần thập phân, **cắt về phía 0**, không làm tròn. Quá lớn thì kẹp về
+  `MAX_VALUE`, âm quá mức thì kẹp về `MIN_VALUE`. `NaN` (*Not a Number*, "không phải số", ví dụ kết quả của
+  `0.0 / 0.0`) thành `0`.
+- **Số thực → `byte`/`short`/`char`:** làm hai bước: đổi sang `int` theo quy tắc trên, **rồi** cắt bit như
+  dòng dưới. Vì vậy `(byte) 1e20` ra `-1` và `(byte) 1000.0` ra `-24`.
 - **Số nguyên → số nguyên nhỏ hơn:** chỉ giữ lại các bit thấp, **vứt các bit cao**. Kết quả có thể đổi cả dấu.
 
 <svg viewBox="0 0 720 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ép int 300 sang byte. 300 ở dạng 32 bit là 00000000 00000000 00000001 00101100. Ba nhóm 8 bit cao gồm 24 bit bị cắt bỏ. Byte chỉ giữ 8 bit thấp 00101100, bằng 44. Vì 300 bằng 256 cộng 44, bit mang giá trị 256 bị mất nên còn 44.">
@@ -875,8 +909,10 @@ public class NarrowingDemo {
         int truncated = (int) hugeBalance; // vượt khoảng int
         System.out.println("(int) 3 tỷ = " + truncated);
 
-        double tooBig = 1e20;
-        System.out.println("(int) 1e20 = " + (int) tooBig); // kẹp về MAX_VALUE
+        // double -> int/long: quá lớn/quá nhỏ thì kẹp về MAX/MIN, NaN thành 0
+        System.out.println((int) 1e20 + " | " + (int) -1e20 + " | " + (int) Double.NaN);
+        // double -> byte: đổi sang int trước, rồi mới cắt bit
+        System.out.println((byte) 1e20 + " | " + (byte) 1000.0);
     }
 }
 ```
@@ -887,7 +923,8 @@ public class NarrowingDemo {
 9 | -9
 (byte) 300 = 44
 (int) 3 tỷ = -1294967296
-(int) 1e20 = 2147483647
+2147483647 | -2147483648 | 0
+-1 | -24
 ```
 
 **Giải thích từng bước.**
@@ -896,46 +933,27 @@ public class NarrowingDemo {
 2. `(byte) 300`: 300 cần 9 bit, `byte` chỉ có 8. Bit thứ 9 (giá trị 256) bị vứt, còn `44` (xem hình).
 3. `(int) 3_000_000_000L`: số dư 3 tỷ đồng bị cắt còn 32 bit thấp, và bit cao nhất còn lại là 1 nên
    kết quả thành **số âm**. Một tài khoản 3 tỷ biến thành âm 1,29 tỷ.
-4. `1e20` nghĩa là 10²⁰, quá lớn với `int`, nên Java kẹp về `Integer.MAX_VALUE` [6].
+4. `1e20` nghĩa là 10²⁰. `(int) 1e20` quá lớn nên kẹp về `Integer.MAX_VALUE`, `(int) -1e20` kẹp về
+   `Integer.MIN_VALUE`, còn `(int) Double.NaN` ra `0` [6].
+5. `(byte) 1e20`: bước 1 kẹp về `int` `2_147_483_647`, có 8 bit thấp là `11111111`; bước 2 giữ 8 bit đó,
+   ra `-1`. `(byte) 1000.0`: bước 1 ra `int` 1000 (`1111101000`), bước 2 giữ `11101000` = 232 − 256 = `-24`.
 
 ### Tràn số: khi phép tính vượt khoảng
 
-**Ý tưởng nôm na.** Kiểu số nguyên giống **đồng hồ công-tơ-mét** của xe máy: chạy tới số lớn nhất
-thì quay về đầu. Với `int`, sau `2_147_483_647` là `-2_147_483_648`. Hiện tượng này là **tràn số**
+**Ý tưởng nôm na.** Mỗi kiểu số nguyên có một giới hạn cố định, vượt qua là "vòng" sang đầu bên kia. Với `int`, sau `2_147_483_647` là `-2_147_483_648`. Hiện tượng này là **tràn số**
 (*overflow*). Java **không báo lỗi**, kết quả sai một cách âm thầm.
 
-<svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vòng tròn số int như đồng hồ công-tơ-mét: tăng theo chiều kim đồng hồ từ 0 lên khoảng 1 tỷ, tới MAX_VALUE 2_147_483_647; cộng thêm 1 thì nhảy sang MIN_VALUE -2_147_483_648, rồi tiếp tục tăng qua khoảng âm 1 tỷ về 0. Bên phải: ví dụ ngân hàng, int balance 2 tỷ cộng 500 triệu ra -1_794_967_296 là sai, dùng long ra 2_500_000_000 là đúng.">
-  <defs>
-    <marker id="b3-ovf-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L6,3 L0,6 Z" fill="#2563EB"/>
-    </marker>
-    <marker id="b3-ovf-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L6,3 L0,6 Z" fill="#DC2626"/>
-    </marker>
-  </defs>
+<svg viewBox="0 0 720 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Số dư 2 tỷ đồng cộng thêm 500 triệu. Lưu bằng int: kết quả -1_794_967_296, sai vì vượt MAX_VALUE khoảng 2,147 tỷ nên vòng sang âm. Lưu bằng long: kết quả 2_500_000_000, đúng vì long chứa được tới khoảng 9,2 tỷ tỷ.">
   <g font-family="sans-serif" font-size="12">
-    <path d="M175,35 A85,85 0 0 1 260,120" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#b3-ovf-arrow)"/>
-    <path d="M260,120 A85,85 0 0 1 185,204" fill="none" stroke="#2563EB" stroke-width="2"/>
-    <path d="M165,204 A85,85 0 0 1 90,120" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#b3-ovf-arrow)"/>
-    <path d="M90,120 A85,85 0 0 1 172,35" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#b3-ovf-arrow)"/>
-    <path d="M187,198 Q175,186 162,198" fill="none" stroke="#DC2626" stroke-width="2" marker-end="url(#b3-ovf-red)"/>
-    <text x="175" y="180" text-anchor="middle" fill="#DC2626" font-weight="bold">+1</text>
-    <text x="175" y="26" text-anchor="middle" fill="#0F172A" font-family="monospace">0</text>
-    <text x="270" y="124" fill="#0F172A">≈ +1 tỷ</text>
-    <text x="80" y="124" text-anchor="end" fill="#0F172A">≈ -1 tỷ</text>
-    <text x="190" y="224" fill="#1D4ED8" font-family="monospace" font-size="11">2_147_483_647</text>
-    <text x="190" y="239" fill="#64748B" font-size="11">MAX_VALUE</text>
-    <text x="160" y="224" text-anchor="end" fill="#DC2626" font-family="monospace" font-size="11">-2_147_483_648</text>
-    <text x="160" y="239" text-anchor="end" fill="#64748B" font-size="11">MIN_VALUE</text>
-    <rect x="370" y="30" width="330" height="190" rx="8" fill="#F8FAFC" stroke="#94A3B8"/>
-    <text x="385" y="54" fill="#0F172A" font-weight="bold">Số dư 2 tỷ + nhận 500 triệu</text>
-    <text x="385" y="84" fill="#0F172A" font-family="monospace">int balance = 2_000_000_000;</text>
-    <text x="385" y="104" fill="#0F172A" font-family="monospace">balance + 500_000_000</text>
-    <rect x="385" y="114" width="300" height="30" rx="6" fill="#FEF2F2" stroke="#DC2626"/>
-    <text x="397" y="134" fill="#DC2626" font-family="monospace">= -1_794_967_296  (sai)</text>
-    <text x="385" y="168" fill="#0F172A" font-family="monospace">long balance → cùng phép tính</text>
-    <rect x="385" y="178" width="300" height="30" rx="6" fill="#ECFDF5" stroke="#10B981"/>
-    <text x="397" y="198" fill="#047857" font-family="monospace">= 2_500_000_000  (đúng)</text>
+    <text x="20" y="22" fill="#0F172A" font-weight="bold">Số dư 2 tỷ đồng + nhận 500 triệu</text>
+    <rect x="20" y="36" width="330" height="80" rx="8" fill="#FEF2F2" stroke="#DC2626"/>
+    <text x="36" y="60" fill="#0F172A" font-family="monospace">int balance</text>
+    <text x="36" y="84" fill="#DC2626" font-family="monospace" font-size="14">= -1_794_967_296  (sai)</text>
+    <text x="36" y="104" fill="#64748B" font-size="11">vượt MAX_VALUE ≈ 2,147 tỷ nên vòng sang âm</text>
+    <rect x="370" y="36" width="330" height="80" rx="8" fill="#ECFDF5" stroke="#10B981"/>
+    <text x="386" y="60" fill="#0F172A" font-family="monospace">long balance</text>
+    <text x="386" y="84" fill="#047857" font-family="monospace" font-size="14">= 2_500_000_000  (đúng)</text>
+    <text x="386" y="104" fill="#64748B" font-size="11">long chứa được tới ≈ 9,2 tỷ tỷ</text>
   </g>
 </svg>
 
@@ -954,9 +972,6 @@ public class OverflowDemo {
         long balanceLong = 2_000_000_000L;
         balanceLong = balanceLong + 500_000_000;
         System.out.println("Dùng long: " + balanceLong);
-
-        // Math.addExact: báo lỗi ngay thay vì âm thầm sai
-        System.out.println(Math.addExact(max, 1));
     }
 }
 ```
@@ -967,9 +982,6 @@ public class OverflowDemo {
 2147483647 + 1 = -2147483648
 Dùng int:  -1794967296
 Dùng long: 2500000000
-Exception in thread "main" java.lang.ArithmeticException: integer overflow
-	at java.base/java.lang.Math.addExact(Math.java:911)
-	at OverflowDemo.main(OverflowDemo.java:17)
 ```
 
 **Giải thích từng bước.**
@@ -978,9 +990,8 @@ Exception in thread "main" java.lang.ArithmeticException: integer overflow
 2. Số dư `int` 2 tỷ + 500 triệu = 2,5 tỷ, vượt ≈ 2,147 tỷ, nên ra số âm. Một khách hàng doanh nghiệp
    có 2,5 tỷ đồng trong tài khoản là chuyện bình thường, nên **đừng bao giờ lưu số tiền (đồng) bằng `int`**.
 3. Cùng phép tính với `long` cho kết quả đúng, vì `long` chứa được tới ≈ 9,2 tỷ tỷ.
-4. `Math.addExact` cộng như thường nhưng **ném lỗi** `ArithmeticException` khi tràn [13]. Chương
-   trình dừng ngay (lỗi lúc chạy, *exception*, chặng sau sẽ học cách xử lý) thay vì âm thầm ghi sai số dư.
-   Trong nghiệp vụ tiền, dừng lại còn tốt hơn ghi sai.
+4. Muốn chương trình báo lỗi ngay thay vì âm thầm ghi sai số dư, Java có `Math.addExact` [13];
+   chi tiết ở [Bài 4](/docs/learning/chang-1/chuoi-va-phep-toan).
 
 ### Nâng kiểu khi tính toán: `byte + byte` ra `int`
 
@@ -989,7 +1000,7 @@ cỡ `int`. Gọi là **nâng kiểu số** (*numeric promotion*) [6]. Nên `byt
 không gán thẳng kết quả về `byte` được.
 
 ```java
-public class CharMath {
+public class PromotionDemo {
     public static void main(String[] args) {
         byte a = 10;
         byte b = 20;
@@ -1022,7 +1033,8 @@ B
 
 1. `a + b`: cả hai được nâng lên `int` rồi mới cộng. Kết quả `30` kiểu `int`.
 2. `(byte) (a + b)`: ép cả biểu thức về `byte`. Nhớ ngoặc quanh `a + b`, nếu không thì chỉ `a` bị ép.
-3. `a += 5;` là phép gán kết hợp. Java tự hiểu nó là `a = (byte) (a + 5)` [6], nên không lỗi. Nhưng
+3. `a += 5;` là **phép gán kết hợp** (*compound assignment*), cách viết tắt của "cộng 5 vào `a`"
+   (bài 4 học kỹ các toán tử). Với `byte`, Java hiểu nó là `a = (byte) (a + 5)` [6], nên không lỗi. Nhưng
    nó cũng tự cắt bit như phần trên nếu tràn, vì vậy hãy cẩn thận.
 4. `grade + 1`: `'A'` (mã 65) được nâng lên `int`, cộng 1 ra `66`. Muốn ra chữ `B` thì ép lại `(char)`.
 5. `char next = 'A' + 1;` được phép vì vế phải là **hằng số** compiler tính được ngay (66) và nó vừa với `char`.
