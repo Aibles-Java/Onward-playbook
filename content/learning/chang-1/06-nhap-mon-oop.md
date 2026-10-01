@@ -473,7 +473,8 @@ sách tham số** rỗng `()`. Kiểu trả về `void` nghĩa là method không
 
 ### ⚠️ Lỗi hay gặp
 
-**Lỗi 1: khai báo kiểu trả về nhưng quên `return`.**
+**Lỗi 1: khai báo kiểu trả về nhưng quên `return`.** Lưu đoạn sau thành file `MissingReturn.java`
+rồi chạy `javac MissingReturn.java`:
 
 ```java
 class Account {
@@ -646,11 +647,13 @@ Bình: 0
    hai tham số, nhờ vậy không phải viết lại hai dòng gán. Trên JDK 21, `this(...)` phải là câu
    lệnh đầu tiên của constructor [4].
 
-Một class có thể có nhiều constructor, miễn danh sách tham số khác nhau. Constructor **cùng tên
+Một class có thể có nhiều constructor, miễn danh sách tham số khác nhau. Cách này gọi là
+**overloading** (nạp chồng); đây mới là bản xem trước, chặng 2 sẽ học kỹ. Constructor **cùng tên
 với class** và **không có kiểu trả về**, kể cả `void`.
 
 **Nếu không viết constructor nào thì sao?** javac tự thêm một **constructor mặc định** (*default
-constructor*): không tham số, không làm gì [6]. Đó là lý do `new Account()` ở phần 2 chạy được.
+constructor*): không tham số, thân rỗng. Thật ra nó chỉ làm một việc: gọi constructor của class cha
+bằng `super()` (chặng 2 sẽ học) [6]. Đó là lý do `new Account()` ở phần 2 chạy được.
 
 ```java
 public class DefaultConstructor {
@@ -730,7 +733,7 @@ class Account {
 ```
 
 ```text
-
+null: 0
 ```
 
 Trong constructor, tên `owner` trơn chỉ tới **tham số** (tham số "che" field cùng tên). Dòng
@@ -828,6 +831,9 @@ giá trị.
   </g>
 </svg>
 
+💡 Hình gộp `owner="An"` vào trong object cho gọn. Thật ra `owner` cũng là một tham chiếu, trỏ tới
+một object `String` khác cũng nằm trên heap.
+
 ```java
 public class References {
     public static void main(String[] args) {
@@ -920,8 +926,8 @@ Exception in thread "main" java.lang.NullPointerException: Cannot invoke "Accoun
 	at NullDemo.main(NullDemo.java:6)
 ```
 
-Từ JDK 14, thông báo NPE được viết "dễ hiểu" hơn, chỉ ra **cái gì** đang `null` (JEP 358, bật mặc
-định từ JDK 15) [7]. Đọc thông báo trên:
+Thông báo NPE "dễ hiểu", chỉ ra **cái gì** đang `null`, đến từ JEP 358 [7]. Trên JDK 14 bạn phải tự
+bật bằng cờ `-XX:+ShowCodeDetailsInExceptionMessages`. Từ JDK 15 trở đi, nó được bật mặc định. Đọc thông báo trên:
 
 - `Cannot invoke "Account.deposit(long)"`: không gọi được method `deposit` của `Account`.
 - `because "<local1>" is null`: vì **biến cục bộ số 1** đang `null`. Biến số 0 là `args`, biến số 1
@@ -1080,7 +1086,7 @@ Account@1188e820
 ### ⚠️ Lỗi hay gặp
 
 **Lỗi 1: method static đọc field instance.** Method static thuộc về class, không gắn với object
-nào, nên nó không biết "`balance` của ai".
+nào, nên nó không biết "`balance` của ai". Lưu thành file `StaticToInstance.java` rồi biên dịch:
 
 ```java
 class Account {
@@ -1103,7 +1109,7 @@ StaticToInstance.java:6: error: non-static variable balance cannot be referenced
 **Cách sửa:** bỏ `static` để nó thành method của từng object, hoặc truyền object vào làm tham số.
 
 **Lỗi 2: gõ sai tên khi ghi đè.** `tostring` khác `toString` (Java phân biệt hoa thường).
-`@Override` bắt được lỗi này ngay lúc biên dịch:
+`@Override` bắt được lỗi này ngay lúc biên dịch (lưu thành file `TypoOverride.java`):
 
 ```java
 class Account {
@@ -1125,6 +1131,9 @@ TypoOverride.java:4: error: method does not override or implement a method from 
 
 Nếu không có `@Override`, code vẫn biên dịch, nhưng `println` sẽ âm thầm in kiểu `Account@...`.
 Đó là lý do nên **luôn** viết `@Override` khi ghi đè.
+
+💡 Phần này chỉ là **bản xem trước**. Chặng 2 sẽ học kỹ `static` (static method, static block, đi
+kèm `final`) và overriding (ghi đè method).
 
 ## 7. Bảo vệ dữ liệu bước đầu: `private` và kiểm tra hợp lệ
 
@@ -1436,8 +1445,14 @@ Tổng số tài khoản: 2
 
 ### ⚠️ Lỗi hay gặp
 
-**Lỗi 1: tên file không khớp tên public class.** Ví dụ lưu `public class Account` vào file
-`Bank.java`:
+**Lỗi 1: tên file không khớp tên public class.** Ví dụ một file tên `Bank.java` (ngắn gọn, không
+có dòng comment ở đầu) nhưng lại khai báo `public class Account`:
+
+```java
+public class Account {
+    private long balance;
+}
+```
 
 ```text
 Bank.java:1: error: class Account is public, should be declared in a file named Account.java
@@ -1446,7 +1461,17 @@ public class Account {
 1 error
 ```
 
-Đặt hai public class trong cùng một file cũng bị lỗi tương tự:
+Đặt hai public class trong cùng một file `Two.java` cũng bị lỗi tương tự:
+
+```java
+public class Account {
+}
+
+public class Main {
+    public static void main(String[] args) {
+    }
+}
+```
 
 ```text
 Two.java:1: error: class Account is public, should be declared in a file named Account.java
@@ -1575,7 +1600,8 @@ In qua biến Object: Account[owner=An, balance=500000]
 
 **Giải thích từng bước:**
 
-1. `an.getClass().getSuperclass()` hỏi "class cha của `Account` là ai?". Câu trả lời là
+1. `getClass()` là method có sẵn trên mọi object, trả về class của object đó.
+   `an.getClass().getSuperclass()` hỏi "class cha của `Account` là ai?". Câu trả lời là
    `java.lang.Object`. Class nào không ghi rõ cha thì cha là `Object` [15]. Đó là **kế thừa**, và
    là lý do mọi class đều có sẵn `toString()`.
 2. Biến `something` có kiểu `Object`, nhưng `something.toString()` lại chạy bản `toString()` **của
@@ -1585,8 +1611,8 @@ Chặng 2 sẽ giải thích kỹ cả hai cơ chế này, cùng `extends`, `int
 
 ### ⚠️ Lỗi hay gặp
 
-**Lỗi 1: tưởng cứ `private` là đã "đóng gói".** Nếu bạn thêm một setter cho phép gán bất kỳ giá
-trị nào, lớp bảo vệ coi như bị gỡ:
+**Lỗi 1: tưởng cứ `private` là đã "đóng gói".** Nếu bạn thêm một **setter** (method dùng để gán giá
+trị cho field, ngược với getter ở phần 7) cho phép gán bất kỳ giá trị nào, lớp bảo vệ coi như bị gỡ:
 
 ```java
 public class FakeEncapsulation {
@@ -1628,7 +1654,7 @@ trước khi sang chặng 2.
 - **Constructor** chạy một lần khi object được tạo. Nó cùng tên class, không có kiểu trả về. Đã
   viết constructor có tham số thì javac không còn tự thêm constructor mặc định.
 - `this.x` là field `x` của chính object hiện tại, dùng để phân biệt với tham số trùng tên.
-- Biến kiểu class giữ **tham chiếu** (trên stack) tới object (trên heap). `b = a` chép tham chiếu,
+- Biến cục bộ kiểu class giữ **tham chiếu** (trên stack) tới object (trên heap). `b = a` chép tham chiếu,
   không chép object. `==` so sánh "cùng object hay không".
 - Gọi method trên `null` gây `NullPointerException`. Đọc phần `because "..." is null` để biết cái
   gì đang `null`.
