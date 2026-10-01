@@ -484,9 +484,10 @@ error: compilation failed
 ```
 
 **Cách sửa:** đặt `super(...)` ở **dòng đầu tiên** của constructor. Ghi chú phiên bản: Java 25 đã chính thức
-nới quy tắc này (JEP 513), cho phép vài câu lệnh **trước** `super(...)`, ví dụ kiểm tra tham số hoặc gán
-field, miễn là không dùng tới object đang được tạo [9]. Bài này chạy trên JDK 21 (chưa thử trên JDK 25), nên
-giữ cách viết chạy được trên cả hai: `super(...)` đứng đầu.
+nới quy tắc này (JEP 513), cho phép vài câu lệnh **trước** `super(...)`, ví dụ kiểm tra tham số, hoặc gán
+giá trị cho field **chưa có giá trị khởi tạo**; ngoài việc gán đó thì không được dùng tới object đang
+được tạo [9]. Bài này chạy trên JDK 21 (chưa thử trên JDK 25), nên giữ cách viết chạy được trên cả hai:
+`super(...)` đứng đầu.
 
 ## 3. `protected`: cửa dành riêng cho class con
 
@@ -693,7 +694,7 @@ src/vn/onward/bank/saving/SavingAccount.java:15: error: balance has private acce
 
 ```text
 src/vn/onward/app/Main.java:13: error: addInterest(long) has protected access in Account
-        an.addInterest(1_000_000);       // Main không phải class con
+        an.addInterest(1_000_000);    // Main không phải class con: bị chặn (xem ⚠️)
           ^
 1 error
 ```
@@ -701,7 +702,8 @@ src/vn/onward/app/Main.java:13: error: addInterest(long) has protected access in
 **Cách sửa:** `Main` chỉ dùng API `public` như `payYearlyInterest()` hay `deposit()`. Đó chính là mục đích
 của `protected`: người ngoài không "bơm lãi" tuỳ ý được.
 
-**Lỗi 3: gọi `protected` qua một biến kiểu cha, ở package khác.** Thêm method này vào `SavingAccount`:
+**Lỗi 3: gọi `protected` qua một biến kiểu cha, ở package khác.** Thêm method này vào `SavingAccount`, ngay sau
+method `payYearlyInterest()` (sau dấu `}` đóng của nó, cách một dòng trống, trước dấu `}` đóng class):
 
 ```java
     // Thử "tặng lãi" vào một tài khoản Account bất kỳ khác
@@ -1145,8 +1147,10 @@ An
 
 ### ⚠️ Lỗi hay gặp
 
-Một file vi phạm cửa 2, 3 và 4 (cửa 1 đã gặp ở phần 4). Lưu hai khối vào cùng file `BrokenRules.java` rồi biên dịch bằng
-`javac -d out BrokenRules.java` (javac in đủ mọi lỗi một lượt):
+Một file vi phạm cửa 2, 3 và 4 (cửa 1 đã gặp ở phần 4). Lưu hai khối vào cùng file
+`BrokenRules.java`: dán khối 2 ngay sau khối 1, **cách nhau đúng một dòng trống** (để số dòng trong
+thông báo lỗi khớp với bài). Rồi biên dịch bằng `javac -d out BrokenRules.java` (javac in đủ mọi lỗi một
+lượt):
 
 ```java
 public class BrokenRules {
