@@ -29,14 +29,14 @@ Phần dưới đây chỉ cài thêm Java.
 
 | Thuật ngữ | Hiểu nôm na | Ví dụ |
 |-----------|-------------|-------|
+| **terminal** (*cửa sổ dòng lệnh*) | Nơi gõ lệnh cho máy tính bằng chữ | Terminal (macOS), PowerShell (Windows) |
 | **JDK** (*Java Development Kit*) | Bộ đồ nghề để viết và chạy Java | JDK 25 |
 | **JVM** (*Java Virtual Machine*) | "Cỗ máy" chạy chương trình Java | lệnh `java` khởi động nó |
 | **mã nguồn** (*source code*) | Chữ bạn gõ vào file `.java` | `HelloOnward.java` |
+| **trình biên dịch** (*compiler*) | Chương trình dịch mã nguồn sang dạng máy chạy được | `javac` |
 | **class** | Cái hộp chứa code | `public class HelloOnward` |
 | **method** | Một nhóm câu lệnh có tên | `main`, `println` |
 | **câu lệnh** (*statement*) | Một yêu cầu cho máy, kết thúc bằng `;` | `System.out.println("Hi");` |
-| **khối lệnh** (*block*) | Nhóm câu lệnh nằm giữa `{` và `}` | thân của `main` |
-| **comment** (*chú thích*) | Ghi chú cho người đọc, máy bỏ qua | `// giải thích` |
 | **định danh** (*identifier*) | Cái tên bạn đặt cho class, biến, method | `customerName` |
 | **từ khoá** (*keyword*) | Từ Java giữ riêng, không được dùng làm tên | `class`, `public` |
 
@@ -44,7 +44,11 @@ Phần dưới đây chỉ cài thêm Java.
 
 Bạn cần **JDK** (*Java Development Kit*, bộ công cụ phát triển Java). Trong đó có lệnh
 `java` để chạy chương trình, `javac` để biên dịch, và `jshell` để thử nhanh. Lộ trình
-khuyên học Java **25**, bản hỗ trợ dài hạn (*LTS*) gần nhất. Chọn **một** cách:
+khuyên học Java **25**, bản hỗ trợ dài hạn (*LTS*) gần nhất.
+
+Mọi lệnh trong bài được gõ vào **terminal** (*cửa sổ dòng lệnh*: app Terminal trên macOS/Linux,
+PowerShell hoặc Windows Terminal trên Windows). Gõ xong một lệnh thì nhấn Enter. Chọn **một**
+trong ba cách cài sau:
 
 ```bash
 # Cách 1: macOS với Homebrew (bản Eclipse Temurin)
@@ -58,10 +62,20 @@ sdk install java 25.0.x-tem   # thay 25.0.x bằng số bản bạn thấy trong
 # Tải bộ cài JDK 25 tại https://adoptium.net/temurin/releases/ rồi cài như phần mềm bình thường
 ```
 
-Kiểm tra lại bằng lệnh sau. Dòng đầu tiên phải bắt đầu bằng số `25`:
+Kiểm tra lại bằng lệnh sau:
 
 ```bash
 java -version
+```
+
+Dòng đầu tiên cho biết phiên bản, dạng `openjdk version "<số phiên bản>" ...`. Số phiên bản
+phải bắt đầu bằng `25` (ví dụ `25.0.x`). Để bạn hình dung, đây là output thật trên một máy đang
+cài JDK 21; máy bạn sẽ thấy số 25 ở vị trí `21.0.9`, và tên nhà phát hành có thể khác:
+
+```text
+openjdk version "21.0.9" 2025-10-21
+OpenJDK Runtime Environment Homebrew (build 21.0.9)
+OpenJDK 64-Bit Server VM Homebrew (build 21.0.9, mixed mode, sharing)
 ```
 
 💡 Muốn thử một câu lệnh mà không cần tạo file? Gõ `jshell` (có từ JDK 9 [10]) rồi
@@ -151,7 +165,8 @@ Xin chào! Chào mừng bạn đến với Onward Digital Banking.
 
 1. `public class HelloOnward { ... }` khai báo một class tên `HelloOnward`. Chữ **`public`**
    (*công khai*) nghĩa là ai cũng dùng được class này. Vì class là `public`, tên file **bắt
-   buộc** là `HelloOnward.java`: trùng từng chữ, kể cả chữ hoa [5].
+   buộc** là `HelloOnward.java`: trùng từng chữ, kể cả chữ hoa [5]. Một file Java điển hình
+   còn có thể chứa thêm `package`, `import`... (các bài sau sẽ gặp) [11].
 2. `public static void main(String[] args)` là **method** (*phương thức*, một nhóm câu lệnh
    có tên) đặc biệt. Khi chương trình chạy, **JVM** (*Java Virtual Machine*, máy ảo chạy
    Java) tìm đúng method này và bắt đầu từ dòng đầu tiên trong nó [6]. Các chữ `static`,
@@ -168,7 +183,7 @@ Xin chào! Chào mừng bạn đến với Onward Digital Banking.
 dịch bằng `javac` (bài 2 sẽ học kỹ lệnh này):
 
 ```text
-Hello.java:1: error: class HelloOnward is public, should be declared in a file named HelloOnward.java
+Hello.java:2: error: class HelloOnward is public, should be declared in a file named HelloOnward.java
 public class HelloOnward {
        ^
 1 error
@@ -197,7 +212,8 @@ nhưng ý nghĩa giống hệt.
 ## 2. Chạy chương trình nhanh bằng một lệnh
 
 **Ý tưởng nôm na.** Máy tính không đọc trực tiếp file `.java`. Code phải được **biên dịch**
-(*compile*: dịch sang dạng máy hiểu) rồi mới **chạy** (*run*). Giống như hồ sơ vay viết
+(*compile*: dịch sang dạng máy hiểu) rồi mới **chạy** (*run*). Chương trình làm việc dịch đó
+gọi là **trình biên dịch** (*compiler*); trong JDK, nó là `javac`. Giống như hồ sơ vay viết
 tay phải được nhập vào hệ thống rồi mới xử lý. Từ JDK 11, lệnh `java` làm được cả hai
 việc trong một bước nếu bạn đưa nó file `.java` [2].
 
@@ -233,7 +249,7 @@ việc trong một bước nếu bạn đưa nó file `.java` [2].
   </g>
 </svg>
 
-Mở terminal tại thư mục chứa `HelloOnward.java` và gõ:
+Mở terminal (cửa sổ dòng lệnh) tại thư mục chứa `HelloOnward.java` và gõ:
 
 ```bash
 java HelloOnward.java
@@ -266,7 +282,8 @@ void main() {
 }
 ```
 
-Cách viết này hợp lệ, nhưng khoá học dùng dạng đầy đủ `public static void main(String[] args)`.
+Ở đây `IO` là class mới `java.lang.IO` của Java 25, giúp in và đọc console gọn hơn mà không
+cần `import`. Cách viết này hợp lệ, nhưng khoá học dùng dạng đầy đủ `public static void main(String[] args)`.
 Lý do: code trong các dự án thật, tài liệu và thư viện bạn sẽ đọc đều viết theo dạng đầy đủ.
 
 ### ⚠️ Lỗi hay gặp
@@ -297,7 +314,7 @@ thấy file `HelloOnward.java` rồi mới chạy.
 dòng một việc, kết thúc bằng dấu `;` như dấu chấm cuối câu. Các câu lệnh được gom vào
 **khối lệnh** (*block*), nằm giữa cặp `{` `}`, giống các ngăn kéo lồng trong tủ hồ sơ.
 
-<svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Khối lệnh lồng nhau như hộp trong hộp. Hộp ngoài cùng là khối class WelcomeSteps. Bên trong là khối method main. Trong main có các câu lệnh, mỗi câu kết thúc bằng dấu chấm phẩy, và một khối lệnh nhỏ hơn chứa hai câu lệnh. Mỗi tầng lồng vào thì thụt lề thêm 4 dấu cách. Bên phải ghi chú: Java phân biệt chữ hoa chữ thường, System khác system, main khác Main, HelloOnward khác helloonward.">
+<svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Khối lệnh lồng nhau như hộp trong hộp. Hộp ngoài cùng là khối class WelcomeSteps. Bên trong là khối method main. Trong main có hai câu lệnh in Bước 1 và Bước 2, mỗi câu kết thúc bằng dấu chấm phẩy, và một khối lệnh nhỏ hơn chứa câu lệnh in - Chuyển tiền. Mỗi tầng lồng vào thì thụt lề thêm 4 dấu cách; trình biên dịch không cần thụt lề nhưng người đọc thì cần. Dấu chấm phẩy kết thúc một câu lệnh như dấu chấm cuối câu văn. Bên phải ghi chú: Java phân biệt chữ hoa chữ thường, System khác system, main khác Main, HelloOnward khác helloonward.">
   <g font-family="sans-serif" font-size="12">
     <rect x="10" y="10" width="470" height="280" rx="10" fill="#EFF6FF" stroke="#2563EB"/>
     <text x="24" y="32" font-family="monospace" font-size="13" fill="#1D4ED8">public class WelcomeSteps {</text>
@@ -318,7 +335,7 @@ dòng một việc, kết thúc bằng dấu `;` như dấu chấm cuối câu. 
     <text x="54" y="248" font-family="monospace" font-size="13" fill="#047857">}</text>
     <text x="24" y="280" font-family="monospace" font-size="13" fill="#1D4ED8">}</text>
     <text x="500" y="30" font-weight="bold" fill="#0F172A">Thụt lề: mỗi tầng thêm 4 dấu cách</text>
-    <text x="500" y="50" fill="#64748B">Compiler không cần thụt lề,</text>
+    <text x="500" y="50" fill="#64748B">Trình biên dịch không cần thụt lề,</text>
     <text x="500" y="66" fill="#64748B">nhưng người đọc code thì cần.</text>
     <text x="500" y="100" font-weight="bold" fill="#0F172A">Dấu <tspan fill="#DC2626">;</tspan> kết thúc một câu lệnh</text>
     <text x="500" y="120" fill="#64748B">Giống dấu chấm cuối câu văn.</text>
@@ -371,7 +388,7 @@ quý khách!
    lồng chỉ để minh hoạ; bài 5 sẽ dùng khối lệnh với `if` và vòng lặp.
 3. Dòng cuối có hai câu lệnh. Java chỉ quan tâm dấu `;`, không quan tâm xuống dòng. Nhưng
    hãy viết **mỗi dòng một câu lệnh** cho dễ đọc.
-4. **Thụt lề** (*indentation*): mỗi tầng khối lồng vào, lùi thêm 4 dấu cách. Compiler bỏ qua
+4. **Thụt lề** (*indentation*): mỗi tầng khối lồng vào, lùi thêm 4 dấu cách. Trình biên dịch bỏ qua
    khoảng trắng này, nhưng đồng nghiệp review code của bạn thì không.
 
 Java **phân biệt chữ hoa và chữ thường** (*case-sensitive*). `System` và `system` là hai
@@ -431,7 +448,7 @@ MissingBrace.java:5: error: reached end of file while parsing
 | Nhiều dòng | `/* ... */` | Giải thích dài, nhiều dòng |
 | Javadoc | `/** ... */` | Mô tả class, method để sinh tài liệu |
 
-<svg viewBox="0 0 760 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Compiler bỏ qua comment. Bên trái là file nguồn có ba loại comment được tô màu: comment Javadoc mở bằng gạch chéo hai sao, comment một dòng mở bằng hai gạch chéo, comment nhiều dòng nằm giữa gạch chéo sao và sao gạch chéo. Mũi tên javac đọc file. Bên phải là những gì compiler thực sự thấy: chỉ còn khai báo class, method main và hai câu lệnh println, mọi comment đã biến mất.">
+<svg viewBox="0 0 760 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Compiler bỏ qua comment. Bên trái là file nguồn có ba loại comment được tô màu: comment Javadoc mở bằng gạch chéo hai sao, comment một dòng mở bằng hai gạch chéo, comment nhiều dòng nằm giữa gạch chéo sao và sao gạch chéo. Mũi tên javac đọc file. Bên phải là những gì trình biên dịch javac thực sự thấy: chỉ còn khai báo class, method main và hai câu lệnh println, mọi comment đã biến mất.">
   <defs>
     <marker id="b1-comment-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
       <path d="M0,0 L6,3 L0,6 Z" fill="#64748B"/>
@@ -459,7 +476,7 @@ MissingBrace.java:5: error: reached end of file while parsing
     <text x="420" y="134" text-anchor="middle" font-family="monospace" fill="#0F172A">javac</text>
     <text x="420" y="164" text-anchor="middle" fill="#64748B" font-size="11">bỏ qua</text>
     <text x="420" y="178" text-anchor="middle" fill="#64748B" font-size="11">comment</text>
-    <text x="460" y="18" font-weight="bold" fill="#0F172A">Những gì compiler thấy</text>
+    <text x="460" y="18" font-weight="bold" fill="#0F172A">Những gì trình biên dịch (javac) thấy</text>
     <rect x="460" y="28" width="290" height="232" rx="8" fill="#FFFFFF" stroke="#94A3B8"/>
     <g font-family="monospace" font-size="12" fill="#0F172A">
       <text x="474" y="102">public class CommentDemo {</text>
@@ -523,10 +540,14 @@ Chúc quý khách một ngày tốt lành.
 Dấu `*/` đầu tiên gặp được sẽ đóng comment, phần còn lại thành code lỗi:
 
 ```java
-/* Tạm tắt đoạn này
-System.out.println("Ưu đãi tháng 10"); /* in khuyến mãi */
-System.out.println("Ưu đãi tháng 11");
-*/
+public class NestedComment {
+    public static void main(String[] args) {
+        /* Tạm tắt đoạn này
+        System.out.println("Ưu đãi tháng 10"); /* in khuyến mãi */
+        System.out.println("Ưu đãi tháng 11");
+        */
+    }
+}
 ```
 
 ```text
@@ -536,10 +557,13 @@ NestedComment.java:6: error: illegal start of expression
 NestedComment.java:6: error: illegal start of expression
         */
          ^
-2 errors
+NestedComment.java:7: error: illegal start of expression
+    }
+    ^
+3 errors
 ```
 
-✅ Cách sửa: khi tắt nhiều dòng code, dùng `//` ở đầu mỗi dòng. Hầu hết IDE có phím tắt
+✅ Cách sửa: khi tắt nhiều dòng code, dùng `//` ở đầu mỗi dòng. Hầu hết **IDE** (*môi trường lập trình*, phần mềm để viết code như IntelliJ IDEA hay VS Code) có phím tắt
 cho việc này (`Cmd + /` hoặc `Ctrl + /`).
 
 ## 5. Định danh và quy ước đặt tên
@@ -554,6 +578,10 @@ Giống số tài khoản: phải đúng **quy tắc** của hệ thống thì m
 - **Không** bắt đầu bằng chữ số.
 - Không trùng **từ khoá** (*keyword*). Cũng không được dùng `true`, `false`, `null`.
 - Phân biệt hoa/thường: `customerName` và `CustomerName` là hai tên khác nhau.
+
+💡 "Chữ cái" ở đây gồm cả chữ Unicode, nên chữ tiếng Việt có dấu (ví dụ `soDư`) vẫn hợp lệ [4].
+Nhưng quy ước là chỉ dùng chữ tiếng Anh không dấu. Riêng `_` đứng một mình là từ khoá, không
+dùng làm tên được; `_` chỉ hợp lệ khi đi cùng ký tự khác, như `_temp`.
 
 **Quy ước** (không bắt buộc, nhưng cả cộng đồng Java và team Onward đều theo) [7]:
 
