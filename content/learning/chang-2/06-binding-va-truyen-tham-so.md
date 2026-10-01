@@ -789,7 +789,7 @@ class SavingAccount extends Account {
 
 1. **Field bị che** (*field hiding*): `SavingAccount` khai báo field `type` trùng tên, nên mỗi object `SavingAccount` có **hai** field `type`. Field được chọn theo kiểu khai báo của biểu thức, không theo object thật [11][12]: `acc.type` ra `ACCOUNT`, `sav.type` ra `SAVING`, dù là cùng một object. Dùng `javap -c` bạn sẽ thấy javac ghi thẳng `getfield ... Account.type` và `getfield ... SavingAccount.type`.
 2. **Method `static` bị che, không bị ghi đè** [14][15]: `acc.bankName()` được javac đổi thành lời gọi `Account.bankName()` theo kiểu khai báo. Gọi method `static` qua biến dễ gây hiểu nhầm, nên luôn gọi bằng tên class.
-3. **Method `private`**: `SavingAccount.note()` là method mới, không ghi đè được `Account.note()` vì lớp con không thấy method `private` của cha. Khi method được gọi là `private`, JLS nói chính nó là method sẽ chạy, không tra theo object [2][13]. Nên `report()` luôn gọi `note()` của `Account`.
+3. **Method `private`**: `SavingAccount.note()` là method mới, không ghi đè được `Account.note()`: JLS coi method `private` như method `final`, vì không thể ghi đè nó [13]. Khi method được gọi là `private`, JLS nói chính nó là method sẽ chạy, không tra theo object [2]. Nên `report()` luôn gọi `note()` của `Account`.
 4. **Method `final`**: không lớp con nào ghi đè được [13], nên `currency()` chỉ có một bản.
 5. **Đối chứng**: `describe()` được ghi đè thật sự, nên chọn theo object thật, ra `SavingAccount`.
 
