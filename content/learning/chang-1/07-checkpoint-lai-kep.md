@@ -169,8 +169,9 @@ vì thế nằm liền trên một dòng. Đó là bình thường.
 **Giải thích từng bước:**
 
 1. `new Scanner(System.in)` tạo một "người nghe" đọc từ bàn phím (bài 5).
-2. `.useLocale(Locale.US)` dặn `Scanner` hiểu dấu chấm là dấu thập phân. **`Locale`** là bộ quy ước
-   theo vùng: dấu thập phân, dấu ngăn cách hàng nghìn... Mặc định `Scanner` dùng `Locale` của máy [5].
+2. `.useLocale(Locale.US)` dặn `Scanner` hiểu dấu chấm là dấu thập phân. Nhắc lại, `Locale` là bộ quy
+   ước theo vùng: dấu thập phân, dấu ngăn cách hàng nghìn... (bài 4). Mặc định `Scanner` dùng `Locale`
+   của máy [5].
 3. `nextLong()` đọc tiền gốc vào kiểu `long` (64 bit, chứa thoải mái hàng nghìn tỷ đồng, bài 3).
 4. `nextBigDecimal()` đọc lãi suất thành `BigDecimal` (bài 4), giữ đúng `6` hay `5.1` như bạn gõ.
 5. `nextInt()` đọc kỳ hạn. 360 tháng thì `int` là đủ.
@@ -243,7 +244,7 @@ lên, thành **505.013**. Chương trình đúng phải ra đúng con số này.
 
 **Lưu đồ** (*flowchart*) của cả chương trình:
 
-<svg viewBox="0 0 700 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lưu đồ chương trình: bắt đầu, đọc gốc, lãi suất, kỳ hạn. Nếu không hợp lệ thì báo lỗi và hỏi lại. Nếu hợp lệ thì đặt số dư bằng gốc và k bằng 1. Khi k còn nhỏ hơn hoặc bằng kỳ hạn: lãi bằng làm tròn của số dư nhân r chia 12, cộng lãi vào số dư, lưu dòng k vào mảng, tăng k rồi quay lại kiểm tra. Khi k vượt kỳ hạn thì in bảng kết quả và kết thúc.">
+<svg viewBox="0 0 700 530" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lưu đồ chương trình: bắt đầu, hỏi một số theo thứ tự gốc, lãi suất, kỳ hạn. Nếu số đó không hợp lệ thì báo lỗi và hỏi lại chính số đó, các số đã nhập đúng được giữ nguyên. Nếu hợp lệ mà chưa đủ 3 số thì hỏi số tiếp theo. Đủ 3 số thì đặt số dư bằng gốc và k bằng 1. Khi k còn nhỏ hơn hoặc bằng kỳ hạn: lãi bằng làm tròn của số dư nhân r chia 12, cộng lãi vào số dư, lưu dòng k vào mảng, tăng k rồi quay lại kiểm tra. Khi k vượt kỳ hạn thì in bảng kết quả và kết thúc.">
   <defs>
     <marker id="b7-flow-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
       <path d="M0,0 L6,3 L0,6 Z" fill="#64748B"/>
@@ -253,38 +254,45 @@ lên, thành **505.013**. Chương trình đúng phải ra đúng con số này.
     <rect x="220" y="10" width="120" height="34" rx="17" fill="#ECFDF5" stroke="#10B981"/>
     <text x="280" y="32" fill="#047857">Bắt đầu</text>
     <line x1="280" y1="44" x2="280" y2="66" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
-    <rect x="160" y="70" width="240" height="40" rx="6" fill="#EFF6FF" stroke="#2563EB"/>
-    <text x="280" y="95" fill="#1D4ED8">Đọc gốc, lãi suất, kỳ hạn</text>
-    <line x1="280" y1="110" x2="280" y2="126" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
+    <rect x="160" y="70" width="240" height="44" rx="6" fill="#EFF6FF" stroke="#2563EB"/>
+    <text x="280" y="88" fill="#1D4ED8">Hỏi số tiếp theo</text>
+    <text x="280" y="105" fill="#64748B" font-size="11">gốc → lãi suất → kỳ hạn</text>
+    <line x1="280" y1="114" x2="280" y2="126" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
     <polygon points="280,130 370,160 280,190 190,160" fill="#FFFBEB" stroke="#D97706"/>
-    <text x="280" y="165" fill="#0F172A">Hợp lệ?</text>
+    <text x="280" y="165" fill="#0F172A">Số này hợp lệ?</text>
     <line x1="370" y1="160" x2="466" y2="160" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
     <text x="418" y="152" fill="#DC2626" font-size="11">Không</text>
-    <rect x="470" y="140" width="200" height="40" rx="6" fill="#FEF2F2" stroke="#DC2626"/>
-    <text x="570" y="165" fill="#DC2626">Báo lỗi, hỏi lại</text>
-    <path d="M570,140 V90 H404" fill="none" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
-    <line x1="280" y1="190" x2="280" y2="211" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
-    <text x="296" y="206" fill="#047857" font-size="11">Có</text>
-    <rect x="160" y="215" width="240" height="40" rx="6" fill="#EFF6FF" stroke="#2563EB"/>
-    <text x="280" y="240" fill="#1D4ED8">số dư = gốc;  k = 1</text>
-    <line x1="280" y1="255" x2="280" y2="276" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
-    <polygon points="280,280 380,310 280,340 180,310" fill="#FFFBEB" stroke="#D97706"/>
-    <text x="280" y="315" fill="#0F172A">k ≤ kỳ hạn?</text>
-    <line x1="280" y1="340" x2="280" y2="366" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
-    <text x="296" y="358" fill="#047857" font-size="11">Có</text>
-    <rect x="130" y="370" width="300" height="74" rx="6" fill="#EFF6FF" stroke="#2563EB"/>
-    <text x="280" y="392" fill="#0F172A">lãi = làm tròn(số dư × r / 12)</text>
-    <text x="280" y="411" fill="#0F172A">số dư = số dư + lãi</text>
-    <text x="280" y="430" fill="#0F172A">lưu dòng k vào mảng;  k = k + 1</text>
-    <path d="M130,407 H70 V310 H176" fill="none" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
-    <text x="52" y="360" fill="#64748B" font-size="11" transform="rotate(-90 52 360)">lặp lại</text>
-    <line x1="380" y1="310" x2="466" y2="310" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
-    <text x="424" y="302" fill="#DC2626" font-size="11">Không</text>
-    <rect x="470" y="290" width="200" height="40" rx="6" fill="#ECFDF5" stroke="#10B981"/>
-    <text x="570" y="315" fill="#047857">In bảng kết quả</text>
-    <line x1="570" y1="330" x2="570" y2="376" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
-    <rect x="510" y="380" width="120" height="34" rx="17" fill="#ECFDF5" stroke="#10B981"/>
-    <text x="570" y="402" fill="#047857">Kết thúc</text>
+    <rect x="470" y="140" width="210" height="40" rx="6" fill="#FEF2F2" stroke="#DC2626"/>
+    <text x="575" y="165" fill="#DC2626">Báo lỗi, hỏi lại đúng số đó</text>
+    <path d="M575,140 V100 H404" fill="none" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
+    <line x1="280" y1="190" x2="280" y2="206" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
+    <text x="296" y="203" fill="#047857" font-size="11">Có</text>
+    <polygon points="280,210 360,235 280,260 200,235" fill="#FFFBEB" stroke="#D97706"/>
+    <text x="280" y="240" fill="#0F172A">Đủ 3 số?</text>
+    <path d="M200,235 H120 V84 H156" fill="none" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
+    <text x="160" y="227" fill="#DC2626" font-size="11">Chưa</text>
+    <line x1="280" y1="260" x2="280" y2="281" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
+    <text x="296" y="276" fill="#047857" font-size="11">Đủ</text>
+    <rect x="160" y="285" width="240" height="40" rx="6" fill="#EFF6FF" stroke="#2563EB"/>
+    <text x="280" y="310" fill="#1D4ED8">số dư = gốc;  k = 1</text>
+    <line x1="280" y1="325" x2="280" y2="346" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
+    <polygon points="280,350 380,380 280,410 180,380" fill="#FFFBEB" stroke="#D97706"/>
+    <text x="280" y="385" fill="#0F172A">k ≤ kỳ hạn?</text>
+    <line x1="280" y1="410" x2="280" y2="436" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
+    <text x="296" y="428" fill="#047857" font-size="11">Có</text>
+    <rect x="130" y="440" width="300" height="74" rx="6" fill="#EFF6FF" stroke="#2563EB"/>
+    <text x="280" y="462" fill="#0F172A">lãi = làm tròn(số dư × r / 12)</text>
+    <text x="280" y="481" fill="#0F172A">số dư = số dư + lãi</text>
+    <text x="280" y="500" fill="#0F172A">lưu dòng k vào mảng;  k = k + 1</text>
+    <path d="M130,477 H70 V380 H176" fill="none" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
+    <text x="52" y="430" fill="#64748B" font-size="11" transform="rotate(-90 52 430)">lặp lại</text>
+    <line x1="380" y1="380" x2="466" y2="380" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
+    <text x="424" y="372" fill="#DC2626" font-size="11">Không</text>
+    <rect x="470" y="360" width="200" height="40" rx="6" fill="#ECFDF5" stroke="#10B981"/>
+    <text x="570" y="385" fill="#047857">In bảng kết quả</text>
+    <line x1="570" y1="400" x2="570" y2="446" stroke="#64748B" marker-end="url(#b7-flow-arrow)"/>
+    <rect x="510" y="450" width="120" height="34" rx="17" fill="#ECFDF5" stroke="#10B981"/>
+    <text x="570" y="472" fill="#047857">Kết thúc</text>
   </g>
 </svg>
 
@@ -422,7 +430,8 @@ Kỳ 3 | lãi thô = 514344.2097499999 | làm tròn = 514344 | số dư = 1.2153
 **Giải thích từng bước:**
 
 1. `5.1 / 100 / 12` lẽ ra là 0,00425. `double` không lưu được đúng số này nên lưu
-   `0.0042499999999999994`. `double` là số dấu phẩy động nhị phân 64 bit theo chuẩn IEEE 754 [4],
+   `0.0042499999999999994`. `double` là số dấu phẩy động nhị phân 64 bit theo chuẩn IEEE 754 [4]
+   (chuẩn quốc tế quy định cách máy tính lưu số thực ở hệ nhị phân, gần như mọi ngôn ngữ đều dùng),
    và 0,00425 không có biểu diễn nhị phân hữu hạn. Giống như 1/3 không viết hết được ở hệ thập phân.
 2. Kỳ 1: lãi thật là 510.000, `double` ra `509999.99999999994`. `Math.round` làm tròn về số nguyên
    gần nhất [8] nên vẫn ra 510.000. Lần này may mắn.
@@ -635,7 +644,7 @@ lãi "biến mất". Đây là lỗi nguy hiểm nhất vì nó im lặng.
 toán, còn tờ sao kê chỉ là giấy ghi kết quả. Không ai làm hộ việc của ai. Chương trình của mình
 cũng chia như vậy, mỗi class một trách nhiệm (bài 6).
 
-<svg viewBox="0 0 740 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ 4 class và trách nhiệm. Main có main và printTable, lo điều phối. Main gọi ConsoleInput (field scanner, method readLong và readDecimal) để nhập và hỏi lại khi sai. Main gọi InterestCalculator (field principal, annualRate, months; method monthlyInterest và schedule trả về mảng PeriodRow) chỉ để tính toán, không in. InterestCalculator tạo ra các PeriodRow (field period, interest, balance), mỗi object là một dòng của bảng. Main đọc mảng PeriodRow để in bảng.">
+<svg viewBox="0 0 740 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ 4 class và trách nhiệm, mọi field đều private. Main có main và printTable, lo điều phối. Main gọi ConsoleInput (field scanner, method readLong và readDecimal) để nhập và hỏi lại khi sai. Main gọi InterestCalculator (field principal, annualRate, months; method monthlyInterest và schedule trả về mảng PeriodRow) chỉ để tính toán, không in. InterestCalculator tạo ra các PeriodRow (field private period, interest, balance và getter getPeriod, getInterest, getBalance), mỗi object là một dòng bảng chỉ đọc. Main đọc mảng PeriodRow qua getter để in bảng.">
   <defs>
     <marker id="b7-cls-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
       <path d="M0,0 L6,3 L0,6 Z" fill="#64748B"/>
@@ -648,32 +657,34 @@ cũng chia như vậy, mỗi class một trách nhiệm (bài 6).
     <text x="268" y="56" fill="#0F172A" font-family="monospace" font-size="11">main(String[] args)</text>
     <text x="268" y="74" fill="#0F172A" font-family="monospace" font-size="11">printTable(rows, principal)</text>
     <text x="370" y="100" text-anchor="middle" fill="#64748B" font-size="11">điều phối + in bảng</text>
-    <rect x="10" y="150" width="210" height="135" rx="8" fill="#F8FAFC" stroke="#94A3B8"/>
+    <rect x="10" y="150" width="210" height="148" rx="8" fill="#F8FAFC" stroke="#94A3B8"/>
     <text x="115" y="170" text-anchor="middle" fill="#0F172A" font-weight="bold">ConsoleInput</text>
     <line x1="10" y1="178" x2="220" y2="178" stroke="#94A3B8"/>
-    <text x="20" y="196" fill="#0F172A" font-family="monospace" font-size="11">scanner</text>
+    <text x="20" y="196" fill="#0F172A" font-family="monospace" font-size="11">- scanner</text>
     <line x1="10" y1="204" x2="220" y2="204" stroke="#94A3B8"/>
     <text x="20" y="222" fill="#0F172A" font-family="monospace" font-size="11">readLong(prompt, min, max)</text>
     <text x="20" y="240" fill="#0F172A" font-family="monospace" font-size="11">readDecimal(prompt,min,max)</text>
-    <line x1="10" y1="250" x2="220" y2="250" stroke="#94A3B8"/>
-    <text x="115" y="272" text-anchor="middle" fill="#64748B" font-size="11">nhập + hỏi lại khi sai</text>
-    <rect x="250" y="150" width="230" height="135" rx="8" fill="#ECFDF5" stroke="#10B981"/>
+    <line x1="10" y1="262" x2="220" y2="262" stroke="#94A3B8"/>
+    <text x="115" y="284" text-anchor="middle" fill="#64748B" font-size="11">nhập + hỏi lại khi sai</text>
+    <rect x="250" y="150" width="230" height="148" rx="8" fill="#ECFDF5" stroke="#10B981"/>
     <text x="365" y="170" text-anchor="middle" fill="#047857" font-weight="bold">InterestCalculator</text>
     <line x1="250" y1="178" x2="480" y2="178" stroke="#10B981"/>
-    <text x="260" y="196" fill="#0F172A" font-family="monospace" font-size="11">principal, annualRate, months</text>
+    <text x="260" y="196" fill="#0F172A" font-family="monospace" font-size="11">- principal, annualRate, months</text>
     <line x1="250" y1="204" x2="480" y2="204" stroke="#10B981"/>
     <text x="260" y="222" fill="#0F172A" font-family="monospace" font-size="11">monthlyInterest(balance)</text>
     <text x="260" y="240" fill="#0F172A" font-family="monospace" font-size="11">schedule(): PeriodRow[]</text>
-    <line x1="250" y1="250" x2="480" y2="250" stroke="#10B981"/>
-    <text x="365" y="272" text-anchor="middle" fill="#64748B" font-size="11">chỉ tính toán, không in</text>
-    <rect x="530" y="150" width="200" height="135" rx="8" fill="#FFFBEB" stroke="#D97706"/>
+    <line x1="250" y1="262" x2="480" y2="262" stroke="#10B981"/>
+    <text x="365" y="284" text-anchor="middle" fill="#64748B" font-size="11">chỉ tính toán, không in</text>
+    <rect x="530" y="150" width="200" height="148" rx="8" fill="#FFFBEB" stroke="#D97706"/>
     <text x="630" y="170" text-anchor="middle" fill="#D97706" font-weight="bold">PeriodRow</text>
     <line x1="530" y1="178" x2="730" y2="178" stroke="#D97706"/>
-    <text x="540" y="196" fill="#0F172A" font-family="monospace" font-size="11">period, interest, balance</text>
+    <text x="540" y="196" fill="#0F172A" font-family="monospace" font-size="11">- period, interest, balance</text>
     <line x1="530" y1="204" x2="730" y2="204" stroke="#D97706"/>
-    <text x="540" y="222" fill="#64748B" font-size="11">(chỉ có constructor)</text>
-    <line x1="530" y1="250" x2="730" y2="250" stroke="#D97706"/>
-    <text x="630" y="272" text-anchor="middle" fill="#64748B" font-size="11">một object = một dòng bảng</text>
+    <text x="540" y="222" fill="#0F172A" font-family="monospace" font-size="11">getPeriod()</text>
+    <text x="540" y="238" fill="#0F172A" font-family="monospace" font-size="11">getInterest()</text>
+    <text x="540" y="254" fill="#0F172A" font-family="monospace" font-size="11">getBalance()</text>
+    <line x1="530" y1="262" x2="730" y2="262" stroke="#D97706"/>
+    <text x="630" y="284" text-anchor="middle" fill="#64748B" font-size="11">một dòng bảng, chỉ đọc</text>
     <line x1="290" y1="110" x2="140" y2="146" stroke="#64748B" stroke-width="1.5" marker-end="url(#b7-cls-arrow)"/>
     <text x="150" y="128" fill="#64748B" font-size="11">1. hỏi input</text>
     <line x1="365" y1="110" x2="365" y2="146" stroke="#64748B" stroke-width="1.5" marker-end="url(#b7-cls-arrow)"/>
@@ -682,6 +693,7 @@ cũng chia như vậy, mỗi class một trách nhiệm (bài 6).
     <text x="548" y="128" fill="#64748B" font-size="11">3. đọc để in</text>
     <line x1="480" y1="218" x2="526" y2="218" stroke="#64748B" stroke-width="1.5" marker-end="url(#b7-cls-arrow)"/>
     <text x="505" y="210" text-anchor="middle" fill="#64748B" font-size="11">tạo</text>
+    <text x="10" y="312" fill="#64748B" font-size="11">Dấu "-" = field private (chỉ code trong class đó chạm được). Bên ngoài đọc qua getter.</text>
   </g>
 </svg>
 
@@ -690,13 +702,18 @@ cũng chia như vậy, mỗi class một trách nhiệm (bài 6).
 | `Main` | Điều phối: hỏi input, gọi tính, in bảng | Tự tính lãi |
 | `ConsoleInput` | Đọc bàn phím, hỏi lại khi sai | Tính toán |
 | `InterestCalculator` | Tính lãi từng kỳ, trả về mảng kết quả | In ra màn hình, đọc bàn phím |
-| `PeriodRow` | Giữ dữ liệu một dòng: kỳ, lãi, số dư | Gì khác ngoài giữ dữ liệu |
+| `PeriodRow` | Giữ dữ liệu một dòng: kỳ, lãi, số dư, cho đọc qua getter | Cho sửa dữ liệu |
 
 Nhờ `InterestCalculator` không đụng tới bàn phím hay màn hình, bạn kiểm tra được nó bằng một
 chương trình nhỏ, không cần gõ gì. Sau này đổi giao diện (web, app) cũng không phải sửa phần tính.
 
-Cả 4 class đặt trong cùng một thư mục, mỗi class một file. Không class nào có `package` (Chặng 2
-sẽ học).
+Cả 4 class đặt trong cùng một thư mục, mỗi class một file (bài 6). Không class nào có `package`
+(Chặng 2 sẽ học).
+
+Mọi field đều là **`private`**, đúng như bài 6 dạy: khách không được tự mở két, muốn đọc phải qua
+quầy (getter). Thêm **`final`** (bài 3) cho field nghĩa là nó chỉ được gán **một lần**, trong
+constructor, rồi không đổi nữa. `PeriodRow` là ví dụ rất hợp: dòng sao kê đã in ra thì không ai
+được sửa. Vì vậy `PeriodRow` chỉ có getter, không có setter hay method nào thay đổi dữ liệu.
 
 ### 5.1. `PeriodRow` và `InterestCalculator`
 
@@ -705,14 +722,28 @@ import java.math.BigDecimal;
 
 // Một dòng của bảng kết quả = kết quả của một kỳ (một tháng)
 class PeriodRow {
-    int period;           // kỳ thứ mấy: 1, 2, 3...
-    BigDecimal interest;  // lãi của kỳ này (đồng)
-    BigDecimal balance;   // số dư cuối kỳ, đã cộng lãi (đồng)
+    // private: chỉ PeriodRow chạm được; final: gán một lần trong constructor rồi thôi
+    private final int period;           // kỳ thứ mấy: 1, 2, 3...
+    private final BigDecimal interest;  // lãi của kỳ này (đồng)
+    private final BigDecimal balance;   // số dư cuối kỳ, đã cộng lãi (đồng)
 
     PeriodRow(int period, BigDecimal interest, BigDecimal balance) {
         this.period = period;
         this.interest = interest;
         this.balance = balance;
+    }
+
+    // Getter: bên ngoài chỉ được ĐỌC, không có cách nào sửa
+    int getPeriod() {
+        return period;
+    }
+
+    BigDecimal getInterest() {
+        return interest;
+    }
+
+    BigDecimal getBalance() {
+        return balance;
     }
 }
 ```
@@ -724,9 +755,9 @@ import java.math.RoundingMode;
 
 // Chỉ lo TÍNH TOÁN: không đọc bàn phím, không in ra màn hình
 class InterestCalculator {
-    BigDecimal principal;   // tiền gốc (đồng)
-    BigDecimal annualRate;  // lãi suất năm, đơn vị %: 6 nghĩa là 6%/năm
-    int months;             // kỳ hạn (số tháng)
+    private final BigDecimal principal;   // tiền gốc (đồng)
+    private final BigDecimal annualRate;  // lãi suất năm, đơn vị %: 6 nghĩa là 6%/năm
+    private final int months;             // kỳ hạn (số tháng)
 
     InterestCalculator(BigDecimal principal, BigDecimal annualRate, int months) {
         this.principal = principal;
@@ -768,8 +799,8 @@ public class CalculatorCheck {
         PeriodRow[] rows = calculator.schedule();
 
         for (PeriodRow row : rows) {
-            System.out.println("Kỳ " + row.period + " | lãi = " + row.interest
-                    + " | số dư = " + row.balance);
+            System.out.println("Kỳ " + row.getPeriod() + " | lãi = " + row.getInterest()
+                    + " | số dư = " + row.getBalance());
         }
         System.out.println("Số kỳ tính được: " + rows.length);
     }
@@ -795,14 +826,17 @@ Khớp từng đồng với bảng tính tay ở phần 2, kể cả 505.013 ở
 **Giải thích từng bước:**
 
 1. `javac -d out *.java` biên dịch mọi file `.java` trong thư mục, đặt file `.class` vào thư mục
-   `out` (bài 2). `java -cp out CalculatorCheck` chạy class có `main`, tìm các class khác trong `out`.
+   `out` (bài 2, bài 6). `java -cp out CalculatorCheck` chạy class có `main`, tìm các class khác trong `out`.
 2. `new InterestCalculator(...)` gọi constructor, `this.principal = principal` gán tham số vào field
-   (bài 6).
+   (bài 6). Field là `private final` nên đây là lần gán duy nhất; gán lại ở method khác thì `javac`
+   báo lỗi.
 3. `schedule()` tạo mảng `PeriodRow[]` có đúng `months` phần tử (bài 5). Vòng `for` chạy `i` từ 0,
    nên kỳ thứ `i + 1` nằm ở ô `rows[i]`.
 4. Mỗi vòng: gọi `monthlyInterest(balance)` lấy lãi đã làm tròn, cộng vào số dư, rồi tạo một
    `PeriodRow` mới để "chụp" lại trạng thái kỳ đó.
-5. `for (PeriodRow row : rows)` là vòng lặp for-each: lần lượt lấy từng phần tử của mảng.
+5. `for (PeriodRow row : rows)` là vòng lặp for-each: lần lượt lấy từng phần tử của mảng (bài 5).
+   `CalculatorCheck` đọc dữ liệu qua `row.getPeriod()`, `row.getInterest()`, `row.getBalance()`.
+   Viết `row.balance` sẽ bị `javac` chặn vì field là `private` (bài 6).
 
 ### 5.2. `ConsoleInput`: nhập liệu và hỏi lại khi sai
 
@@ -815,7 +849,7 @@ import java.util.Scanner;
 
 // Chỉ lo NHẬP LIỆU: hỏi đi hỏi lại tới khi người dùng gõ đúng
 class ConsoleInput {
-    Scanner scanner;
+    private final Scanner scanner;
 
     ConsoleInput(Scanner scanner) {
         this.scanner = scanner;
@@ -830,7 +864,7 @@ class ConsoleInput {
             }
             if (!scanner.hasNextLong()) {              // không phải số nguyên
                 String wrong = scanner.next();         // BỎ token sai đi, nếu không sẽ lặp mãi
-                System.out.println("  -> \"" + wrong + "\" không phải số nguyên. Nhập lại nhé.");
+                System.out.println("  -> \"" + wrong + "\" không phải số nguyên hợp lệ (hoặc quá lớn). Nhập lại nhé.");
                 continue;
             }
             long value = scanner.nextLong();
@@ -878,7 +912,7 @@ Output của class này sẽ được chạy thật ở phần 7 (ca kiểm th�
 
 1. `while (true)` lặp mãi, chỉ thoát khi gặp `return` với giá trị hợp lệ (bài 5).
 2. `hasNext()` hỏi "còn dữ liệu không?". Nếu input đã hết (bấm Ctrl+D, hoặc pipe hết dòng), ta báo
-   rồi `System.exit(1)` kết thúc chương trình với mã lỗi 1.
+   rồi `System.exit(1)` kết thúc chương trình với exit code 1, tức là "kết thúc không bình thường" (bài 2).
 3. `hasNextLong()` hỏi "token sắp tới có phải số `long` không?" mà **không lấy nó ra** [5]. Một
    **token** là một cụm ký tự liền nhau, ngăn cách bằng khoảng trắng hoặc xuống dòng.
 4. Không phải số: `scanner.next()` **lấy token sai ra và bỏ đi**, in thông báo, rồi `continue`
@@ -936,7 +970,7 @@ true
 **Ý tưởng nôm na:** `printf` giống mẫu sao kê in sẵn: mỗi cột có bề rộng cố định, bạn chỉ việc
 điền số vào. Số nào cũng căn phải, hàng đơn vị thẳng hàng đơn vị, nhìn là so được ngay.
 
-<svg viewBox="0 0 740 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Giải phẫu chuỗi định dạng printf phần trăm 4d, gạch đứng, phần trăm phẩy 15 chấm 0 f, gạch đứng, phần trăm phẩy 16 chấm 0 f, phần trăm n. Mỗi mã giữ một ô có độ rộng cố định và căn phải: ô 4 ký tự in kỳ 3, ô 15 ký tự in lãi 505.013, ô 16 ký tự in số dư 101.507.513, phần trăm n xuống dòng. Dấu phẩy bật ngăn cách hàng nghìn, chấm 0 nghĩa là không có chữ số thập phân. Với Locale vi-VN dấu ngăn cách là dấu chấm.">
+<svg viewBox="0 0 740 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Giải phẫu chuỗi định dạng printf phần trăm 4d, gạch đứng, phần trăm phẩy 15 chấm 0 f, gạch đứng, phần trăm phẩy 20 chấm 0 f, phần trăm n. Mỗi mã giữ một ô có độ rộng cố định và căn phải: ô 4 ký tự in kỳ 3, ô 15 ký tự in lãi 505.013, ô 20 ký tự in số dư 101.507.513, phần trăm n xuống dòng. Dấu phẩy bật ngăn cách hàng nghìn, chấm 0 nghĩa là không có chữ số thập phân. Với Locale vi-VN dấu ngăn cách là dấu chấm.">
   <g font-family="sans-serif" font-size="12" text-anchor="middle">
     <text x="20" y="24" text-anchor="start" fill="#64748B">Chuỗi định dạng:</text>
     <rect x="40" y="36" width="70" height="34" rx="6" fill="#EFF6FF" stroke="#2563EB"/>
@@ -948,7 +982,7 @@ true
     <rect x="315" y="36" width="40" height="34" rx="6" fill="#F8FAFC" stroke="#94A3B8"/>
     <text x="335" y="58" fill="#64748B" font-family="monospace" font-size="14">|</text>
     <rect x="360" y="36" width="160" height="34" rx="6" fill="#ECFDF5" stroke="#10B981"/>
-    <text x="440" y="58" fill="#047857" font-family="monospace" font-size="14">%,16.0f</text>
+    <text x="440" y="58" fill="#047857" font-family="monospace" font-size="14">%,20.0f</text>
     <rect x="525" y="36" width="50" height="34" rx="6" fill="#FFFBEB" stroke="#D97706"/>
     <text x="550" y="58" fill="#D97706" font-family="monospace" font-size="14">%n</text>
     <text x="20" y="100" text-anchor="start" fill="#64748B">Kết quả (kỳ 3):</text>
@@ -965,7 +999,7 @@ true
     <text x="75" y="179" fill="#1D4ED8" font-size="11">căn phải</text>
     <text x="235" y="164" fill="#047857" font-size="11">rộng 15, căn phải</text>
     <text x="235" y="179" fill="#047857" font-size="11">, = ngăn cách nghìn</text>
-    <text x="440" y="164" fill="#047857" font-size="11">rộng 16, căn phải</text>
+    <text x="440" y="164" fill="#047857" font-size="11">rộng 20, căn phải</text>
     <text x="440" y="179" fill="#047857" font-size="11">.0 = không số lẻ</text>
     <text x="550" y="164" fill="#D97706" font-size="11">xuống</text>
     <text x="550" y="179" fill="#D97706" font-size="11">dòng</text>
@@ -1005,17 +1039,17 @@ public class Main {
 
     // In bảng; vi-VN dùng dấu chấm ngăn cách hàng nghìn: 100.000.000
     static void printTable(PeriodRow[] rows, BigDecimal principal) {
-        Locale vn = Locale.forLanguageTag("vi-VN");
-        String line = "-----+-----------------+------------------";
+        Locale vn = Locale.of("vi", "VN");
+        String line = "-----+-----------------+----------------------";
         System.out.println();
-        System.out.printf("%4s | %15s | %16s%n", "Kỳ", "Lãi kỳ (đ)", "Số dư (đ)");
+        System.out.printf("%4s | %15s | %20s%n", "Kỳ", "Lãi kỳ (đ)", "Số dư (đ)");
         System.out.println(line);
         for (PeriodRow row : rows) {
-            System.out.printf(vn, "%4d | %,15.0f | %,16.0f%n",
-                    row.period, row.interest, row.balance);
+            System.out.printf(vn, "%4d | %,15.0f | %,20.0f%n",
+                    row.getPeriod(), row.getInterest(), row.getBalance());
         }
         System.out.println(line);
-        BigDecimal last = rows[rows.length - 1].balance;
+        BigDecimal last = rows[rows.length - 1].getBalance();
         System.out.printf(vn, "Tổng lãi: %,.0f đ | Nhận về: %,.0f đ%n",
                 last.subtract(principal), last);
     }
@@ -1032,21 +1066,21 @@ printf '100000000\n6\n12\n' | java -cp out Main
 ```text
 === TÍNH LÃI KÉP (lãi nhập gốc hằng tháng) ===
 Tiền gốc (đồng): Lãi suất năm (%, ví dụ 5.1): Kỳ hạn (tháng, 1-360):
-  Kỳ |      Lãi kỳ (đ) |        Số dư (đ)
------+-----------------+------------------
-   1 |         500.000 |      100.500.000
-   2 |         502.500 |      101.002.500
-   3 |         505.013 |      101.507.513
-   4 |         507.538 |      102.015.051
-   5 |         510.075 |      102.525.126
-   6 |         512.626 |      103.037.752
-   7 |         515.189 |      103.552.941
-   8 |         517.765 |      104.070.706
-   9 |         520.354 |      104.591.060
-  10 |         522.955 |      105.114.015
-  11 |         525.570 |      105.639.585
-  12 |         528.198 |      106.167.783
------+-----------------+------------------
+  Kỳ |      Lãi kỳ (đ) |            Số dư (đ)
+-----+-----------------+----------------------
+   1 |         500.000 |          100.500.000
+   2 |         502.500 |          101.002.500
+   3 |         505.013 |          101.507.513
+   4 |         507.538 |          102.015.051
+   5 |         510.075 |          102.525.126
+   6 |         512.626 |          103.037.752
+   7 |         515.189 |          103.552.941
+   8 |         517.765 |          104.070.706
+   9 |         520.354 |          104.591.060
+  10 |         522.955 |          105.114.015
+  11 |         525.570 |          105.639.585
+  12 |         528.198 |          106.167.783
+-----+-----------------+----------------------
 Tổng lãi: 6.167.783 đ | Nhận về: 106.167.783 đ
 ```
 
@@ -1056,15 +1090,16 @@ Tổng lãi: 6.167.783 đ | Nhận về: 106.167.783 đ
 2. `(int) input.readLong(...)`: `readLong` trả về `long`, ta **ép kiểu** về `int` (bài 3). An toàn vì
    đã giới hạn 1–360.
 3. `BigDecimal.valueOf(principal)` đổi `long` sang `BigDecimal` chính xác.
-4. `printTable` dùng `Locale.forLanguageTag("vi-VN")` khi **in**: dấu ngăn cách hàng nghìn là dấu
-   chấm, đúng thói quen đọc số của người Việt.
-5. Chuỗi định dạng `"%4d | %,15.0f | %,16.0f%n"` [6]:
+4. `printTable` dùng `Locale.of("vi", "VN")` khi **in**, giống cách bài 4 định dạng tiền: dấu ngăn
+   cách hàng nghìn là dấu chấm, đúng thói quen đọc số của người Việt.
+5. Chuỗi định dạng `"%4d | %,15.0f | %,20.0f%n"` [6]:
    - `%4d`: số nguyên, rộng 4 ký tự, căn phải.
    - `%,15.0f`: rộng 15, dấu `,` bật ngăn cách hàng nghìn theo `Locale`, `.0` là 0 chữ số thập phân.
      Với `BigDecimal`, `%f` làm việc thẳng trên giá trị thập phân; nếu phải bớt chữ số thì làm tròn
      `HALF_UP` [6].
    - `%n`: xuống dòng.
-6. Tổng lãi = số dư kỳ cuối − tiền gốc.
+6. Tổng lãi = số dư kỳ cuối − tiền gốc. Mọi giá trị đều đọc qua getter (`row.getBalance()`...).
+7. `printTable` là method `static` (bài 6): nó không cần object `Main` nào, `main` gọi thẳng được.
 
 > 💡 Hãy để ý quy ước: **nhập** dùng dấu chấm thập phân (`5.1`), **in** dùng dấu chấm ngăn cách
 > hàng nghìn (`100.500.000`). Hai việc này dùng hai `Locale` khác nhau, và chương trình ghi rõ ra
@@ -1072,7 +1107,7 @@ Tổng lãi: 6.167.783 đ | Nhận về: 106.167.783 đ
 
 ### ⚠️ Lỗi hay gặp
 
-**1. Dùng `%d` cho `BigDecimal`.** `%d` chỉ nhận số nguyên (`int`, `long`, `BigInteger`...) [6]:
+**1. Dùng `%d` cho `BigDecimal`.** `%d` chỉ nhận các kiểu số nguyên như `int`, `long` [6]:
 
 ```java
         System.out.printf("%,.0f%n", new BigDecimal("126265100"));
@@ -1090,10 +1125,12 @@ Dòng đầu chạy được nhưng dùng dấu phẩy ngăn cách (vì không t
 tiếng Anh). Dòng thứ hai ném `IllegalFormatConversionException`: "`d` không dùng được cho
 `BigDecimal`". **Cách sửa:** dùng `%,.0f` cho `BigDecimal` và truyền `Locale` vi-VN vào `printf`.
 
-**2. Cột quá hẹp.** Nếu số dài hơn bề rộng, Java vẫn in đủ số nhưng cột bị xô lệch. Cột số dư ở đây
-rộng 16 ký tự, vừa với số tới 999.999.999.999 đ (15 ký tự kể cả dấu chấm). Gửi 1.000 tỷ
-(`1.000.000.000.000`, 17 ký tự) là cột lệch. **Cách sửa:** đếm số ký tự của số lớn nhất bạn muốn
-hỗ trợ, cộng cả dấu ngăn cách, rồi chọn bề rộng.
+**2. Cột quá hẹp.** Nếu số dài hơn bề rộng, Java vẫn in đủ số nhưng cột bị xô lệch. Ví dụ với cột
+rộng 16, tiền gốc tối đa của chương trình là 1.000 tỷ (`1.000.000.000.000`, 17 ký tự) đã tràn cột.
+**Cách sửa:** đếm số ký tự của số lớn nhất bạn muốn hỗ trợ, cộng cả dấu ngăn cách, rồi chọn bề
+rộng. Vì vậy cột số dư ở đây rộng **20**, vừa với số tới 999.999.999.999.999 đ (19 ký tự), dư chỗ
+cho tiền gốc 1.000 tỷ cộng lãi. Lãi suất và kỳ hạn cực lớn (ví dụ 100%/năm trong 360 tháng) vẫn có
+thể làm số dư vượt cột; khi đó số vẫn in đủ, chỉ là cột lệch.
 
 ---
 
@@ -1169,12 +1206,12 @@ printf '100\n6\n3\n' | java -cp out Main
 ```text
 === TÍNH LÃI KÉP (lãi nhập gốc hằng tháng) ===
 Tiền gốc (đồng): Lãi suất năm (%, ví dụ 5.1): Kỳ hạn (tháng, 1-360):
-  Kỳ |      Lãi kỳ (đ) |        Số dư (đ)
------+-----------------+------------------
-   1 |               1 |              101
-   2 |               1 |              102
-   3 |               1 |              103
------+-----------------+------------------
+  Kỳ |      Lãi kỳ (đ) |            Số dư (đ)
+-----+-----------------+----------------------
+   1 |               1 |                  101
+   2 |               1 |                  102
+   3 |               1 |                  103
+-----+-----------------+----------------------
 Tổng lãi: 3 đ | Nhận về: 103 đ
 ```
 
@@ -1187,12 +1224,12 @@ printf '50000000\n0\n3\n' | java -cp out Main
 ```text
 === TÍNH LÃI KÉP (lãi nhập gốc hằng tháng) ===
 Tiền gốc (đồng): Lãi suất năm (%, ví dụ 5.1): Kỳ hạn (tháng, 1-360):
-  Kỳ |      Lãi kỳ (đ) |        Số dư (đ)
------+-----------------+------------------
-   1 |               0 |       50.000.000
-   2 |               0 |       50.000.000
-   3 |               0 |       50.000.000
------+-----------------+------------------
+  Kỳ |      Lãi kỳ (đ) |            Số dư (đ)
+-----+-----------------+----------------------
+   1 |               0 |           50.000.000
+   2 |               0 |           50.000.000
+   3 |               0 |           50.000.000
+-----+-----------------+----------------------
 Tổng lãi: 0 đ | Nhận về: 50.000.000 đ
 ```
 
@@ -1204,28 +1241,28 @@ printf 'abc\n-5\n100.000.000\n120000000\n5,1\n150\n5.1\n0\n12\n' | java -cp out 
 
 ```text
 === TÍNH LÃI KÉP (lãi nhập gốc hằng tháng) ===
-Tiền gốc (đồng):   -> "abc" không phải số nguyên. Nhập lại nhé.
+Tiền gốc (đồng):   -> "abc" không phải số nguyên hợp lệ (hoặc quá lớn). Nhập lại nhé.
 Tiền gốc (đồng):   -> Cần từ 1 đến 1000000000000. Nhập lại nhé.
-Tiền gốc (đồng):   -> "100.000.000" không phải số nguyên. Nhập lại nhé.
+Tiền gốc (đồng):   -> "100.000.000" không phải số nguyên hợp lệ (hoặc quá lớn). Nhập lại nhé.
 Tiền gốc (đồng): Lãi suất năm (%, ví dụ 5.1):   -> "5,1" không phải số. Nhập lại nhé.
 Lãi suất năm (%, ví dụ 5.1):   -> Cần từ 0 đến 100. Nhập lại nhé.
 Lãi suất năm (%, ví dụ 5.1): Kỳ hạn (tháng, 1-360):   -> Cần từ 1 đến 360. Nhập lại nhé.
 Kỳ hạn (tháng, 1-360):
-  Kỳ |      Lãi kỳ (đ) |        Số dư (đ)
------+-----------------+------------------
-   1 |         510.000 |      120.510.000
-   2 |         512.168 |      121.022.168
-   3 |         514.344 |      121.536.512
-   4 |         516.530 |      122.053.042
-   5 |         518.725 |      122.571.767
-   6 |         520.930 |      123.092.697
-   7 |         523.144 |      123.615.841
-   8 |         525.367 |      124.141.208
-   9 |         527.600 |      124.668.808
-  10 |         529.842 |      125.198.650
-  11 |         532.094 |      125.730.744
-  12 |         534.356 |      126.265.100
------+-----------------+------------------
+  Kỳ |      Lãi kỳ (đ) |            Số dư (đ)
+-----+-----------------+----------------------
+   1 |         510.000 |          120.510.000
+   2 |         512.168 |          121.022.168
+   3 |         514.344 |          121.536.512
+   4 |         516.530 |          122.053.042
+   5 |         518.725 |          122.571.767
+   6 |         520.930 |          123.092.697
+   7 |         523.144 |          123.615.841
+   8 |         525.367 |          124.141.208
+   9 |         527.600 |          124.668.808
+  10 |         529.842 |          125.198.650
+  11 |         532.094 |          125.730.744
+  12 |         534.356 |          126.265.100
+-----+-----------------+----------------------
 Tổng lãi: 6.265.100 đ | Nhận về: 126.265.100 đ
 ```
 
@@ -1258,8 +1295,9 @@ Không còn dữ liệu nhập. Thoát.
 
 ### ⚠️ Lỗi hay gặp
 
-**1. Chạy `java Main.java` với chương trình nhiều file trên JDK 21.** Chế độ chạy thẳng file nguồn
-của JDK 21 chỉ biên dịch **một** file, nên không thấy các class khác:
+**1. Nếu máy bạn dùng JDK 21: chạy `java Main.java` với chương trình nhiều file.** Với JDK 25 như
+bài 1 hướng dẫn cài, lệnh này chạy bình thường. Nhưng chế độ chạy thẳng file nguồn của JDK 21 chỉ
+biên dịch **một** file, nên không thấy các class khác. Output thật trên JDK 21:
 
 ```text
 Main.java:24: error: cannot find symbol
@@ -1270,7 +1308,7 @@ Main.java:24: error: cannot find symbol
 ...
 ```
 
-Từ JDK 22, `java Main.java` tự tìm các file nguồn khác trong cùng thư mục [9]. Để chạy được trên
+Từ JDK 22 (gồm cả JDK 25), `java Main.java` tự tìm các file nguồn khác trong cùng thư mục [9]. Để chạy được trên
 mọi bản JDK, hãy dùng `javac -d out *.java` rồi `java -cp out Main`.
 
 **2. Quên `-cp out`.** File `.class` nằm trong `out`, nhưng `java` mặc định tìm ở thư mục hiện tại:
@@ -1289,7 +1327,7 @@ Caused by: java.lang.ClassNotFoundException: Main
 **Ý tưởng nôm na:** trước khi đóng sổ cuối ngày, giao dịch viên rà một danh sách kiểm tra. Trước
 khi sang Chặng 2, bạn cũng rà danh sách dưới đây. Mọi ý đều phải "có" thì mới coi là qua checkpoint.
 
-<svg viewBox="0 0 740 312" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bài checkpoint dùng lại kiến thức của cả 6 bài. Bài 1 · Cú pháp cơ bản dùng cho: class, main, khối { }, comment. Bài 2 · Vòng đời chương trình dùng cho: javac -d out *.java  →  java -cp out Main. Bài 3 · Kiểu, biến, ép kiểu dùng cho: long cho tiền gốc, int cho kỳ, ép (int). Bài 4 · Chuỗi và phép toán dùng cho: BigDecimal, HALF_UP, printf, String. Bài 5 · Mảng, điều kiện, vòng lặp dùng cho: Scanner, while (true), for, PeriodRow[]. Bài 6 · Nhập môn OOP dùng cho: 4 class, constructor, this, object. Bước tiếp theo là Chặng 2, lập trình hướng đối tượng.">
+<svg viewBox="0 0 740 312" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bài checkpoint dùng lại kiến thức của cả 6 bài. Bài 1 · Cú pháp cơ bản dùng cho: class, main, khối { }, comment. Bài 2 · Vòng đời chương trình dùng cho: javac -d out *.java  →  java -cp out Main. Bài 3 · Kiểu, biến, ép kiểu dùng cho: long cho tiền gốc, int cho kỳ, ép (int). Bài 4 · Chuỗi và phép toán dùng cho: BigDecimal, HALF_UP, printf, String. Bài 5 · Mảng, điều kiện, vòng lặp dùng cho: Scanner, while (true), for, PeriodRow[]. Bài 6 · Nhập môn OOP dùng cho: 4 class, private + getter, static, this. Bước tiếp theo là Chặng 2: học sâu hơn về lập trình hướng đối tượng.">
   <defs>
     <marker id="b7-recap-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
       <path d="M0,0 L6,3 L0,6 Z" fill="#64748B"/>
@@ -1327,9 +1365,9 @@ khi sang Chặng 2, bạn cũng rà danh sách dưới đây. Mọi ý đều ph
     <text x="22" y="242" fill="#1D4ED8">Bài 6 · Nhập môn OOP</text>
     <line x1="260" y1="237" x2="326" y2="237" stroke="#64748B" marker-end="url(#b7-recap-arrow)"/>
     <rect x="330" y="222" width="400" height="30" rx="6" fill="#F8FAFC" stroke="#94A3B8"/>
-    <text x="342" y="242" fill="#0F172A" font-family="monospace" font-size="11">4 class, constructor, this, object</text>
+    <text x="342" y="242" fill="#0F172A" font-family="monospace" font-size="11">4 class, private + getter, static, this</text>
     <rect x="10" y="268" width="720" height="34" rx="17" fill="#ECFDF5" stroke="#10B981"/>
-    <text x="370" y="290" text-anchor="middle" fill="#047857">Qua checkpoint → Chặng 2: OOP kỹ hơn (private, static, final, kế thừa, record, enum...)</text>
+    <text x="370" y="290" text-anchor="middle" fill="#047857">Qua checkpoint → Chặng 2: học sâu hơn OOP (đóng gói, access modifier, kế thừa, record, enum...)</text>
   </g>
 </svg>
 
@@ -1342,6 +1380,7 @@ khi sang Chặng 2, bạn cũng rà danh sách dưới đây. Mọi ý đều ph
 - [ ] Bảng căn cột thẳng hàng, số có dấu ngăn cách hàng nghìn.
 - [ ] Không có `double` hay `float` nào dính tới tiền.
 - [ ] `InterestCalculator` không có `System.out` hay `Scanner` nào.
+- [ ] Mọi field đều `private`; class khác chỉ đọc dữ liệu qua getter.
 
 **Giải thích được bằng lời** (nói to cho một người bạn nghe):
 
@@ -1350,9 +1389,9 @@ khi sang Chặng 2, bạn cũng rà danh sách dưới đây. Mọi ý đều ph
 - [ ] Vì sao `divide` cần `MathContext` hoặc scale + `RoundingMode`?
 - [ ] Vì sao tách 4 class thay vì viết hết trong `main`?
 
-Muốn đo xem lãi nhập gốc lợi hơn bao nhiêu, đây là một chương trình nhỏ dùng lại
-`InterestCalculator` để so với **lãi cuối kỳ** (*simple interest*: lãi chỉ tính trên gốc, trả một
-lần khi đáo hạn). Đặt cùng thư mục với `PeriodRow.java` và `InterestCalculator.java`:
+Muốn thấy "lãi của lãi" lớn cỡ nào, đây là một chương trình nhỏ dùng lại `InterestCalculator` để
+so với **lãi đơn** (*simple interest*: lãi chỉ tính trên gốc), **trả một lần cuối kỳ**. Đặt cùng thư
+mục với `PeriodRow.java` và `InterestCalculator.java`:
 
 ```java
 import java.math.BigDecimal;
@@ -1371,7 +1410,7 @@ public class CompareMaturity {
 
         // Lãi nhập gốc hằng tháng: dùng lại InterestCalculator của bài này
         PeriodRow[] rows = new InterestCalculator(principal, annualRate, months).schedule();
-        BigDecimal compound = rows[months - 1].balance.subtract(principal);
+        BigDecimal compound = rows[months - 1].getBalance().subtract(principal);
 
         System.out.println("Lãi cuối kỳ (không nhập gốc): " + simple);
         System.out.println("Lãi nhập gốc hằng tháng     : " + compound);
@@ -1394,10 +1433,14 @@ Chênh lệch                  : 167783
 
 **Giải thích từng bước:**
 
-1. Lãi cuối kỳ = 100.000.000 × 6 × 12 / 1200 = 6.000.000 đ, tính một lần.
+1. Lãi đơn trả cuối kỳ = 100.000.000 × 6 × 12 / 1200 = 6.000.000 đ, tính một lần.
 2. Lãi nhập gốc lấy từ số dư kỳ cuối của `schedule()`, trừ tiền gốc.
-3. Chênh 167.783 đ là "lãi của lãi". Đó chính là ý nghĩa của chữ **kép**.
-4. `rows[months - 1]` là phần tử cuối mảng: mảng đánh số từ 0 nên kỳ 12 nằm ở ô 11 (bài 5).
+3. Chênh 167.783 đ là "lãi của lãi". Đó chính là ý nghĩa của chữ **kép**. Lưu ý: ví dụ này giả
+   định **cùng một mức lãi suất** cho cả hai cách. Ngân hàng thật niêm yết lãi suất khác nhau cho từng
+   phương thức trả lãi (lĩnh lãi hằng tháng, cuối kỳ...), nên so sánh này **không** có nghĩa là
+   "nhận lãi hằng tháng luôn lợi hơn". Muốn so hai sản phẩm thật, phải dùng đúng lãi suất của từng sản phẩm.
+4. `rows[months - 1]` là phần tử cuối mảng: mảng đánh số từ 0 nên kỳ 12 nằm ở ô 11 (bài 5). Số dư
+   đọc qua getter `getBalance()` vì field của `PeriodRow` là `private`.
 
 > 💡 Nếu dùng công thức gọn 100.000.000 × (1 + 0,005)¹² bạn sẽ được khoảng 106.167.781,19 đ. Con số
 > này khác 106.167.783 của chương trình vì công thức gọn **không làm tròn từng kỳ**. Không bên nào
@@ -1425,7 +1468,8 @@ Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 12 ou
 
 ## Tóm tắt
 
-- Một CLI hoàn chỉnh gồm 3 việc: **nhập** (có kiểm tra), **tính**, **in**. Tách mỗi việc vào một class.
+- Một CLI hoàn chỉnh gồm 3 việc: **nhập** (có kiểm tra), **tính**, **in**. Tách mỗi việc vào một class,
+  field để `private` (thêm `final` nếu không đổi), bên ngoài đọc qua getter.
 - Luôn **tính tay** vài kỳ trước khi code. Số tính tay là đáp án để chấm chương trình.
 - `long` chia nguyên bị **cắt** phần lẻ; `double` lưu số **gần đúng** ở hệ nhị phân. Cả hai đều có thể
   làm lệch tiền, ví dụ kỳ 2 của ca 120 triệu, 5,1%.
@@ -1544,5 +1588,6 @@ sau `1,500000,100500000`. Lưu ra file bằng cách chuyển hướng output:
 ✅ Bạn đã đi hết Chặng 1. Xong checklist ở phần 8 là bạn qua checkpoint.
 
 **Bài tiếp theo:** Chặng 1 kết thúc tại đây. Quay về [Lộ trình Java Developer](/docs/learning/java-roadmap)
-để bắt đầu **Chặng 2: Lập trình hướng đối tượng**, nơi bạn học kỹ `private`, `static`, `final`,
-kế thừa, `record`, `enum`... và mô hình hoá `Account`, `SavingAccount`, `Transaction`.
+để bắt đầu **Chặng 2: Lập trình hướng đối tượng**. Ở đó bạn học **sâu hơn** những gì bài 6 mới mở
+đầu (đóng gói, các access modifier, `static`, `final`), rồi sang kế thừa, `record`, `enum`... và mô
+hình hoá `Account`, `SavingAccount`, `Transaction`.
