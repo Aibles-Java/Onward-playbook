@@ -51,7 +51,7 @@ PowerShell hoặc Windows Terminal trên Windows). Gõ xong một lệnh thì nh
 trong ba cách cài sau:
 
 ```bash
-# Cách 1: macOS với Homebrew (bản Eclipse Temurin)
+# Cách 1: macOS với Homebrew (trình cài phần mềm cho macOS), bản Eclipse Temurin
 brew install --cask temurin@25
 
 # Cách 2: macOS / Linux với SDKMAN (quản lý nhiều phiên bản JDK)
@@ -92,9 +92,12 @@ y hệt trên JDK 25.
 ## 1. Chương trình Java đầu tiên
 
 **Ý tưởng nôm na.** Một chương trình Java giống một chi nhánh ngân hàng. Toà nhà là
-**class** (*lớp*), chứa mọi thứ bên trong. Cửa chính là method `main`: khách nào cũng
-phải vào từ đó. Bên trong, nhân viên làm từng việc theo thứ tự, mỗi việc là một
-**câu lệnh** (*statement*).
+**class** (*lớp*), chứa mọi thứ bên trong. Cửa chính là **method** (*phương thức*: một nhóm
+câu lệnh có tên) tên `main`. **JVM** (*Java Virtual Machine*, máy ảo chạy chương trình Java)
+luôn bắt đầu từ cửa này, như khách nào cũng phải vào từ cửa chính. Bên trong, nhân viên
+làm từng việc theo thứ tự, mỗi việc là một **câu lệnh** (*statement*). Mỗi "phòng" được
+bao bởi một cặp `{` `}`; phần nằm giữa một cặp như vậy gọi là **khối lệnh** (*block*),
+phần 3 sẽ học kỹ.
 
 <svg viewBox="0 0 760 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Giải phẫu chương trình HelloOnward. Bên trái là 5 dòng code: public class HelloOnward mở ngoặc nhọn; public static void main(String[] args) mở ngoặc nhọn; System.out.println(&quot;Xin chào!&quot;) chấm phẩy; đóng ngoặc; đóng ngoặc. Bên phải là chú thích: 1 class HelloOnward là hộp chứa code, tên phải trùng tên file HelloOnward.java; 2 method main là cửa chính, JVM bắt đầu chạy từ đây; 3 String[] args là dữ liệu gõ kèm lệnh chạy, bài này chưa dùng; 4 câu lệnh in một dòng chữ, kết thúc bằng dấu chấm phẩy; 5 cặp ngoặc nhọn mở và đóng một khối, khối class bọc ngoài khối main.">
   <g font-family="sans-serif">
@@ -163,24 +166,28 @@ Xin chào! Chào mừng bạn đến với Onward Digital Banking.
 
 **Giải thích từng bước:**
 
-1. `public class HelloOnward { ... }` khai báo một class tên `HelloOnward`. Chữ **`public`**
+1. Các dòng bắt đầu bằng `//` là **comment** (*chú thích*): ghi chú cho người đọc, Java bỏ
+   qua chúng. Phần 4 sẽ học kỹ.
+2. `public class HelloOnward { ... }` khai báo một class tên `HelloOnward`. Chữ **`public`**
    (*công khai*) nghĩa là ai cũng dùng được class này. Vì class là `public`, tên file **bắt
    buộc** là `HelloOnward.java`: trùng từng chữ, kể cả chữ hoa [5]. Một file Java điển hình
    còn có thể chứa thêm `package`, `import`... (các bài sau sẽ gặp) [11].
-2. `public static void main(String[] args)` là **method** (*phương thức*, một nhóm câu lệnh
-   có tên) đặc biệt. Khi chương trình chạy, **JVM** (*Java Virtual Machine*, máy ảo chạy
-   Java) tìm đúng method này và bắt đầu từ dòng đầu tiên trong nó [6]. Các chữ `static`,
+   Cặp `{` `}` sau tên class tạo thành khối lệnh của class, bao lấy toàn bộ nội dung của nó.
+3. `public static void main(String[] args)` là method đặc biệt. Khi chương trình chạy, JVM
+   tìm đúng method này và bắt đầu từ dòng đầu tiên trong nó [6]. Các chữ `static`,
    `void` bạn tạm học thuộc; bài 6 và chặng 2 sẽ giải thích.
-3. `String[] args` là danh sách chữ mà người dùng có thể gõ kèm khi chạy chương trình. Bài
+4. `String[] args` là danh sách chữ mà người dùng có thể gõ kèm khi chạy chương trình. Bài
    này chưa dùng tới, nhưng vẫn phải viết đủ.
-4. `System.out.println("...");` là câu lệnh duy nhất. Nó in đoạn chữ trong dấu ngoặc kép
-   ra màn hình. Đoạn chữ đặt trong `"..."` gọi là **chuỗi ký tự** (*String literal*).
-5. Hết câu lệnh trong `main` thì chương trình kết thúc.
+5. `System.out.println("...");` là câu lệnh duy nhất. Nó in đoạn chữ trong dấu ngoặc kép
+   ra màn hình. `System.out` là "đầu ra chuẩn", thường chính là màn hình terminal (phần 6
+   nói kỹ). Đoạn chữ đặt trong `"..."` gọi là **chuỗi ký tự** (*String literal*).
+6. Hết câu lệnh trong `main` thì chương trình kết thúc.
 
 ### ⚠️ Lỗi hay gặp
 
 **Lỗi 1: tên file khác tên class.** Bạn lưu code trên vào file `Hello.java` rồi biên
-dịch bằng `javac` (bài 2 sẽ học kỹ lệnh này):
+dịch (*compile*: dịch code sang dạng máy chạy được, phần 2 nói rõ hơn) bằng lệnh `javac`
+(bài 2 sẽ học kỹ lệnh này):
 
 ```text
 Hello.java:2: error: class HelloOnward is public, should be declared in a file named HelloOnward.java
@@ -265,16 +272,18 @@ Xin chào! Chào mừng bạn đến với Onward Digital Banking.
 
 1. Lệnh `java` thấy đuôi `.java`, nên hiểu đây là **chế độ chạy file nguồn** (*source-file
    mode*) [2].
-2. Nó biên dịch file ngay trong bộ nhớ. Không có file `.class` nào được tạo ra trên ổ đĩa.
+2. Nó biên dịch file ngay trong bộ nhớ. Không có file `.class` (file chứa code đã biên dịch) nào được tạo ra trên ổ đĩa.
 3. JVM tìm method `main` trong class đầu tiên của file, rồi chạy từng câu lệnh.
 4. Câu lệnh `println` in chữ ra màn hình. Hết `main`, chương trình dừng.
 
-Cách này rất tiện để học và thử nghiệm. Dự án thật (như các service của Onward) gồm hàng
-trăm file, nên sẽ biên dịch bằng `javac` hoặc công cụ build. **Bài 2** sẽ đi kỹ con đường
-`javac` → bytecode → JVM.
+Cách này rất tiện để học và thử nghiệm. Dự án thật (như các dịch vụ phần mềm của Onward) gồm
+hàng trăm file, nên sẽ biên dịch bằng `javac` hoặc **công cụ build** (*build tool*: phần mềm tự
+động biên dịch và đóng gói cả dự án, như Maven hay Gradle; chặng 5 sẽ học). **Bài 2** sẽ đi
+kỹ con đường `javac` → **bytecode** (dạng code trung gian mà JVM hiểu) → JVM.
 
 💡 **Ghi chú về Java 25.** Từ JDK 25, Java cho phép viết rút gọn, không cần khai báo class
-và không cần `public static` (JEP 512) [3]:
+và không cần `public static` (JEP 512; **JEP** là *JDK Enhancement Proposal*, bản đề xuất cải
+tiến chính thức của JDK) [3]:
 
 ```java
 void main() {
@@ -282,8 +291,8 @@ void main() {
 }
 ```
 
-Ở đây `IO` là class mới `java.lang.IO` của Java 25, giúp in và đọc console gọn hơn mà không
-cần `import`. Cách viết này hợp lệ, nhưng khoá học dùng dạng đầy đủ `public static void main(String[] args)`.
+Ở đây `IO` là class mới `java.lang.IO` của Java 25, giúp in và đọc dữ liệu trên terminal gọn hơn mà
+không cần dòng `import` (khai báo dùng class ở nơi khác, các bài sau sẽ gặp). Cách viết này hợp lệ, nhưng khoá học dùng dạng đầy đủ `public static void main(String[] args)`.
 Lý do: code trong các dự án thật, tài liệu và thư viện bạn sẽ đọc đều viết theo dạng đầy đủ.
 
 ### ⚠️ Lỗi hay gặp
