@@ -3,12 +3,13 @@
 import { useMemo, useState } from "react";
 import { GLOSSARY, searchGlossary } from "@/features/glossary/lib/glossary";
 
-const CATEGORIES = ["Tất cả", "Onward", "Nghiệp vụ", "Kỹ thuật"] as const;
+const CATEGORIES = ["Tất cả", "Onward", "Nghiệp vụ", "Kỹ thuật", "Java"] as const;
 
 const CAT_STYLE: Record<string, string> = {
   Onward: "bg-primary/10 text-primary",
   "Nghiệp vụ": "bg-accent/10 text-accent",
   "Kỹ thuật": "bg-amber-100 text-amber-700",
+  Java: "bg-rose-100 text-rose-700",
 };
 
 export default function GlossaryPage() {

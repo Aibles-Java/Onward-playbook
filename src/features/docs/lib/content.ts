@@ -36,6 +36,7 @@ const CATEGORY_META: Record<string, { label: string; order: number }> = {
   workflow: { label: "Quy trình làm việc", order: 2 },
   "design-system": { label: "Design System", order: 3 },
   architecture: { label: "Kiến trúc", order: 4 },
+  learning: { label: "Lộ trình học", order: 5 },
 };
 
 function walk(dir: string): string[] {
