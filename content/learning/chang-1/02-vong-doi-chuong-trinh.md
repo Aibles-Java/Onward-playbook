@@ -83,7 +83,7 @@ Trong Java, đường đi đó gồm bốn chặng:
     <text x="355" y="160" fill="#64748B" font-size="11">mọi JVM đều hiểu</text>
     <text x="515" y="160" fill="#64748B" font-size="11">nạp, kiểm tra, chạy</text>
     <text x="670" y="160" fill="#64748B" font-size="11">riêng cho từng CPU</text>
-    <text x="370" y="190" fill="#0F172A">bản thảo → bản "phiên âm chung" → phiên dịch viên tại chỗ → tiếng địa phương</text>
+    <text x="370" y="190" fill="#0F172A">hợp đồng mẫu → bản "phiên âm chung" → phiên dịch viên tại chỗ → tiếng địa phương</text>
   </g>
 </svg>
 
@@ -119,11 +119,12 @@ Java version: 21.0.9
 1. `javac` đọc `src/Greeting.java`, kiểm tra cú pháp và kiểu dữ liệu. Không có lỗi thì nó ghi ra
    `out/Greeting.class`. Mỗi class trong mã nguồn thành một file `.class` riêng [6].
 2. File `.class` không phải chữ. Nếu xem bằng công cụ đọc nhị phân, 4 byte đầu luôn là `CAFEBABE`.
-   Đây là "con dấu" nhận diện file class của Java [4].
+   Đây là "con dấu" (*magic number*) nhận diện file class của Java [16].
 3. `java -cp out Greeting` khởi động JVM, bảo nó tìm class tên `Greeting` trong thư mục `out`,
    rồi gọi hàm `main` [7].
-4. JVM dịch dần bytecode sang mã máy trong lúc chạy. Hai dòng chữ được in ra, `main` kết thúc,
-   JVM tắt.
+4. JVM thực thi bytecode: chủ yếu **thông dịch** từng lệnh, và chỉ dịch phần code chạy nhiều ("code nóng")
+   sang mã máy bằng JIT (mục 5 sẽ giải thích). Chương trình ngắn như `Greeting` gần như chỉ được thông
+   dịch. Hai dòng chữ được in ra, `main` kết thúc, JVM tắt.
 
 💡 Điểm mấu chốt: **biên dịch một lần, chạy bao nhiêu lần cũng được**. Lần chạy sau không cần `javac` nữa.
 
@@ -202,7 +203,8 @@ OpenJDK 64-Bit Server VM Homebrew (build 21.0.9, mixed mode, sharing)
 ```
 
 Muốn tận mắt thấy "JRE chỉ để chạy", hãy dùng `jlink` tạo một runtime chỉ chứa module cơ bản
-`java.base`, rồi chạy lại `Greeting` bằng runtime đó:
+`java.base`, rồi chạy lại `Greeting` bằng runtime đó. Một **module** (*module*) là một gói thư viện có
+tên. `java.base` là module lõi, chứa `java.lang`, `java.util`, `java.io`… (chặng sau sẽ học kỹ module):
 
 ```bash
 jlink --add-modules java.base --output myjre   # tạo runtime gọn
@@ -503,7 +505,7 @@ lệnh trong hàm [10].
    định. Nó chỉ gọi constructor của class cha `Object` (`invokespecial`). Bài OOP sẽ học kỹ.
 2. Hàm `main` chạy trước:
    - `bipush 100`: đặt hằng số 100 lên stack. `iconst_5`: đặt 5 lên stack. Số nhỏ từ -1 tới 5 có lệnh
-     riêng ngắn gọn (`iconst_<n>`), số từ -128 tới 127 dùng `bipush`.
+     riêng ngắn gọn (`iconst_<n>`). Các số khác trong khoảng -128 tới 127 dùng `bipush`.
    - `invokestatic #7`: gọi hàm `static` tên `total`. `(II)I` nghĩa là "nhận hai `int`, trả về `int`".
 3. Bên trong `total` (xem sơ đồ): `iload_0` và `iload_1` đặt `amount` và `fee` lên stack, `iadd` lấy
    hai số xuống và đặt tổng 105 lên, `ireturn` trả 105 về cho `main`.
@@ -525,7 +527,8 @@ giản, không phụ thuộc CPU, và `javap` giúp bạn nhìn vào khi tò mò
 
   Sửa: biên dịch trước, rồi `javap -c -cp bc/out Fee`.
 - **Quên `-c`.** Gõ `javap -cp bc/out Fee` chỉ in danh sách hàm, không in bytecode. Muốn xem lệnh,
-  thêm `-c`. Muốn xem cả constant pool và số phiên bản class, dùng `-v`.
+  thêm `-c`. Muốn xem cả **constant pool** (bảng hằng số và tên class, tên hàm mà các chỗ như `#7` trỏ tới) và số
+  phiên bản class, dùng `-v`.
 
 ---
 
@@ -754,7 +757,8 @@ Java: 17.0.15
 
 **Giải thích từng bước.**
 
-1. `javac --release 17` sinh bytecode theo chuẩn Java 17 và chỉ cho dùng API có trong Java 17 [6].
+1. `javac --release 17` sinh bytecode theo chuẩn Java 17 và chỉ cho dùng **API** (*Application Programming Interface*: các class và hàm có
+   sẵn trong thư viện chuẩn, như `System.getProperty`) có trong Java 17 [6].
 2. Cùng một file `Hello.class` (không biên dịch lại) chạy được trên cả JVM 17 lẫn JVM 21.
 3. Nếu bạn copy đúng file đó sang laptop Windows hay một server Linux có JVM 17+, nó cũng chạy, chỉ khác
    dòng `OS` và `CPU`. (Output trên đây chỉ là của máy macOS của tác giả.) Đây là lý do một ứng dụng Spring
@@ -870,9 +874,9 @@ Exception in thread "main" java.lang.IllegalStateException: Mất kết nối co
    "có tham số thì lấy tham số đầu, không thì dùng `ok`".
 2. **Không tham số**: `main` chạy tới dấu `}` cuối. Chương trình chỉ có một **thread** (luồng chạy) là
    `main`, nên khi nó xong thì JVM tắt, exit code `0`. Chính xác hơn: JVM tắt khi **mọi thread không
-   phải daemon** đã kết thúc [14]. Bài về concurrency ở chặng 4 sẽ học kỹ thread.
+   phải daemon** đã kết thúc [14]. Thread **daemon** là thread phụ chạy nền, JVM không chờ nó xong. Bài về concurrency ở chặng 4 sẽ học kỹ thread.
 3. **`exit`**: `System.exit(3)` dừng JVM ngay lập tức với exit code 3. Dòng "main chạy hết…" không được
-   in. Quy ước: `0` là thành công, khác `0` là lỗi. Bạn tự chọn số để phân biệt loại lỗi.
+   in. (Chính xác hơn: trước khi tắt, JVM vẫn chạy các *shutdown hook* đã đăng ký [14]; bài sau mới cần tới.) Quy ước: `0` là thành công, khác `0` là lỗi. Bạn tự chọn số để phân biệt loại lỗi.
 4. **`crash`**: exception không được bắt, JVM in stack trace ra **stderr** (luồng báo lỗi) và lệnh `java`
    trả về exit code `1`.
 
@@ -986,7 +990,7 @@ vào nó để biết bước trước thành công hay thất bại.
 1. roadmap.sh, *Java Developer Roadmap*: <https://roadmap.sh/java>
 2. Starter Tutorials, *Life Cycle of a Java Program* (tài liệu roadmap.sh gợi ý cho chủ đề này):
    <https://www.startertutorials.com/corejava/life-cycle-java-program.html>
-3. dev.java, *Getting Started with Java*: <https://dev.java/learn/getting-started/>
+3. dev.java, *Your First Java Code*: <https://dev.java/learn/first-steps/first-java-code/>
 4. Oracle, *The Java Virtual Machine Specification, Java SE 21*, chương 2 "The Structure of the JVM":
    <https://docs.oracle.com/javase/specs/jvms/se21/html/jvms-2.html>
 5. JVMS SE 21, chương 5 "Loading, Linking, and Initializing":
@@ -1006,5 +1010,7 @@ vào nó để biết bước trước thành công hay thất bại.
 14. Oracle, *The Java Language Specification, Java SE 21*, §12.8 "Program Exit":
     <https://docs.oracle.com/javase/specs/jls/se21/html/jls-12.html#jls-12.8>
 15. Baeldung, *Difference Between JVM, JRE, and JDK*: <https://www.baeldung.com/jvm-vs-jre-vs-jdk>
+16. JVMS SE 21, chương 4 "The class File Format", §4.1:
+    <https://docs.oracle.com/javase/specs/jvms/se21/html/jvms-4.html#jvms-4.1>
 
 **Bài tiếp theo:** [Bài 3 · Kiểu dữ liệu, biến và ép kiểu](/docs/learning/chang-1/kieu-du-lieu-bien-ep-kieu)
