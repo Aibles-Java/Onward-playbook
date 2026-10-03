@@ -37,6 +37,7 @@ const CATEGORY_META: Record<string, { label: string; order: number }> = {
   "design-system": { label: "Design System", order: 3 },
   architecture: { label: "Kiến trúc", order: 4 },
   learning: { label: "Lộ trình học", order: 5 },
+  fineract: { label: "Apache Fineract", order: 6 },
 };
 
 function walk(dir: string): string[] {
