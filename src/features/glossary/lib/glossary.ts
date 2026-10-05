@@ -206,6 +206,111 @@ export const GLOSSARY: Term[] = [
       "Method đặc biệt trùng tên class, chạy khi gọi new để gán giá trị ban đầu cho object.",
     category: "Java",
   },
+  {
+    term: "Fineract",
+    short: "Core banking mã nguồn mở",
+    definition:
+      "Apache Fineract: nền tảng core banking mã nguồn mở của Apache Software Foundation, giấy phép Apache-2.0. Không có giao diện, mọi thao tác qua REST API. Khóa học dùng bản 1.15.0.",
+    category: "Kỹ thuật",
+  },
+  {
+    term: "Core banking",
+    short: "Hệ thống lõi ngân hàng",
+    definition:
+      "Hệ thống giữ sổ sách của ngân hàng: số dư, giao dịch, sổ cái. Ở Onward, core là hệ thống bên ngoài nằm sau một port; nền tảng lo hành trình khách hàng.",
+    category: "Nghiệp vụ",
+  },
+  {
+    term: "Tenant",
+    short: "Đơn vị thuê riêng",
+    definition:
+      "Một tổ chức có dữ liệu tách riêng trong cùng một máy chủ Fineract. Mọi request mang header Fineract-Platform-TenantId (local: default). Tenant tách các tổ chức, không tách các khách hàng của cùng một tổ chức.",
+    category: "Kỹ thuật",
+  },
+  {
+    term: "Office",
+    short: "Chi nhánh",
+    definition:
+      "Cây chi nhánh trong Fineract. Tenant mới chỉ có Head Office; mọi client thuộc một office. Office không phải tenant và không phải ranh giới khách hàng.",
+    category: "Nghiệp vụ",
+  },
+  {
+    term: "Client",
+    short: "Khách hàng trong core",
+    definition:
+      "Một người (hoặc pháp nhân) mà Fineract biết đến. Client không giữ tiền; tiền nằm ở tài khoản. Không đồng nhất với Customer của nền tảng.",
+    category: "Nghiệp vụ",
+  },
+  {
+    term: "Savings product",
+    short: "Sản phẩm tiền gửi",
+    definition:
+      "Mẫu sản phẩm trong Fineract: lãi suất, tiền tệ, quy tắc hạch toán và GL nhận từng loại chuyển động tiền. Không ai sở hữu product; tài khoản được mở trên product.",
+    category: "Nghiệp vụ",
+  },
+  {
+    term: "Savings account",
+    short: "Tài khoản tiền gửi",
+    definition:
+      "Tài khoản của một client (hoặc group) mở trên một savings product. Đi qua Submitted → Approved → Active → Closed; chỉ khi Active tiền mới vào ra được. Fineract dùng nó cho cả tài khoản thanh toán.",
+    category: "Nghiệp vụ",
+  },
+  {
+    term: "Sub-status / Block",
+    short: "Trạng thái phụ / Đóng băng",
+    definition:
+      "Trục trạng thái thứ hai của tài khoản Fineract (subStatus). Block chặn cả hai chiều, BlockDebit chặn tiền ra, BlockCredit chặn tiền vào. Khi bị block, status vẫn là Active.",
+    category: "Nghiệp vụ",
+  },
+  {
+    term: "Hold",
+    short: "Tạm giữ tiền",
+    definition:
+      "Giữ một số tiền trên tài khoản (holdAmount): giảm số dư khả dụng nhưng không đổi số dư sổ cái. Hold và lệnh nhả hold đều là dòng giao dịch.",
+    category: "Nghiệp vụ",
+  },
+  {
+    term: "Charge",
+    short: "Phí",
+    definition:
+      "Định nghĩa phí trong Fineract, gắn vào tài khoản. Core ghi phí mà ta bảo nó ghi vào GL Fee Income; không có bảng kê phí tổng hợp theo kỳ.",
+    category: "Nghiệp vụ",
+  },
+  {
+    term: "GL account",
+    short: "Tài khoản sổ cái",
+    definition:
+      "Một ngăn có nhãn trong sổ cái của chính ngân hàng (ví dụ Cash, Savings Control). Có năm loại: Asset, Liability, Equity, Income, Expense. Khác với tài khoản của khách.",
+    category: "Nghiệp vụ",
+  },
+  {
+    term: "Journal entry",
+    short: "Bút toán",
+    definition:
+      "Một dòng ghi Nợ (DEBIT) hoặc Có (CREDIT) vào một GL account. Mỗi chuyển động tiền sinh ít nhất một cặp; tổng Nợ luôn bằng tổng Có.",
+    category: "Nghiệp vụ",
+  },
+  {
+    term: "Financial activity mapping",
+    short: "Ánh xạ hoạt động tài chính",
+    definition:
+      "Cấu hình toàn tenant chỉ cho Fineract một loại hoạt động hạch toán vào GL nào. Ví dụ liabilityTransfer (id 200) phải map vào GL suspense thì chuyển khoản mới chạy.",
+    category: "Kỹ thuật",
+  },
+  {
+    term: "Idempotency-Key",
+    short: "Khoá chống lặp",
+    definition:
+      "Header HTTP đánh dấu một request gửi lại là bản thử lại. Cùng key cùng body: trả lại kết quả cũ. Key chỉ bảo vệ chính key đó, không bảo vệ nội dung request.",
+    category: "Kỹ thuật",
+  },
+  {
+    term: "Standing instruction",
+    short: "Lệnh chuyển tiền định kỳ",
+    definition:
+      "Lệnh để core tự chuyển tiền theo lịch. Fineract cho tạo lệnh này; việc thực thi chưa được kiểm chứng, nên Onward dùng scheduler của riêng mình.",
+    category: "Nghiệp vụ",
+  },
 ];
 
 export function searchGlossary(query: string): Term[] {
