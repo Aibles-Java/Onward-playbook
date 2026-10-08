@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -16,8 +17,17 @@ export function MarkdownRenderer({ content }: { content: string }) {
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw, rehypeSlug]}
         components={{
-          a: ({ href, children, ...props }) => {
+          a: ({ href, children, node: _node, ...props }) => {
+            // Link nội bộ (/docs/...) dùng next/link để áp dụng basePath, trailingSlash & điều hướng client-side.
+            const isInternal = !!href && href.startsWith("/") && !href.startsWith("//");
             const isDownload = /\.(pdf|docx?|xlsx?|zip|svg)$/i.test(href ?? "");
+            if (isInternal && !isDownload) {
+              return (
+                <Link href={href} {...props}>
+                  {children}
+                </Link>
+              );
+            }
             return (
               <a
                 href={href}
